@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    <meta name="description" content="Hexo Theme Redefine">
+    <meta name="author" content="Shiszhi">
+    
+    <title>
+        
+            C++关键字之constexpr |
+        
+        Shiszhi&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/css/v5-font-face.min.css">
+
+    
+<link rel="stylesheet" href="/css/duotone.min.css">
+
+    
+<link rel="stylesheet" href="/css/brands.min.css">
+
+    
+<link rel="stylesheet" href="/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/css/brands.min.css">
+
+    
+<link rel="stylesheet" href="/css/css2.css">
+
+    <link rel="stylesheet" href="//evan.beee.top/css/waline.css"/>
+    <script src="//evan.beee.top/js/waline.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script id="hexo-configurations">
+    let REDEFINE = window.REDEFINE || {};
+    REDEFINE.hexo_config = {"hostname":"shis-zhi.github.io","root":"/","language":"en","path":"search.xml"};
+    REDEFINE.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#005080","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"240px","content_max_width":"960px","nav_color":{"left":"#f78736","right":"#367df7","transparency":35},"hover":{"shadow":true,"scale":false},"first_screen":{"enable":true,"background_image":{"light":"https://img-blog.csdnimg.cn/20210120123514329.jpg","dark":"https://img-blog.csdnimg.cn/20210120123514329.jpg"},"title_color":{"light":"#fff","dark":"#323739"},"description":""},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true},"pjax":{"enable":true},"lazyload":{"enable":true},"version":"0.3.4"};
+    REDEFINE.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fas fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+    
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                Shiszhi&#39;s Blog
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation"><h1 style="font-size:2rem; font-weight: bold; margin: 10px 0;">C++关键字之constexpr</h1></span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/avatar.svg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Shiszhi</span>
+                        
+                            <span class="author-label">lol</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-duotone fa-pen-line"></i>&nbsp;
+        <span class="pc">2022-12-06 19:13:21</span>
+        <span class="mobile">2022-12-06 19:13</span>
+    </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-duotone fa-tags"></i></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/C/">C++</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>1.6k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>6 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <p><code>constexpr</code>关键字的功能是使指定的常量表达式获得在程序编译阶段计算出结果的能力，而不必等到程序运行阶段。C++ 11 标准中，<code>constexpr</code>可用于修饰普通变量、函数（包括模板函数）以及类的构造函数。</p>
+<h2 id="1-constexpr修饰普通变量"><a href="#1-constexpr修饰普通变量" class="headerlink" title="1.constexpr修饰普通变量"></a>1.<code>constexpr</code>修饰普通变量</h2><p>C++11 标准中，定义变量时可以用<code>constexpr</code>修饰，从而使该变量获得在编译阶段即可计算出结果的能力。<br>需要注意的是：使用 constexpr 修饰普通变量时，变量必须经过初始化且初始值必须是一个常量表达式。举个例子：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">constexpr</span> <span class="type">int</span> num = <span class="number">1</span> + <span class="number">2</span> + <span class="number">3</span>;</span><br><span class="line">    <span class="type">int</span> url[num] = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;;</span><br><span class="line">    cout&lt;&lt; url[<span class="number">1</span>] &lt;&lt; endl;    <span class="comment">//2</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="2-constexpr修饰函数"><a href="#2-constexpr修饰函数" class="headerlink" title="2.constexpr修饰函数"></a>2.<code>constexpr</code>修饰函数</h2><p><code>constexpr</code>还可以用于修饰函数的返回值，这样的函数又称为<strong>常量表达式函数</strong>。<br>但是<code>constexpr</code>并不能修饰任意函数的返回值，对于函数有以下几个要求：</p>
+<p>一、<strong>整个函数的函数体中，除了可以包含<code>using</code>指令、<code>typedef</code>语句以及<code>static_assert</code>断言外，只能包含一条 <code>return</code>返回语句。</strong><br>对于C++11来说要求如上，但在C++14中解除了对<code>constexpr</code>函数的大部分限制。详情可以查阅相关文档。</p>
+  <div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">constexpr</span> <span class="type">int</span> <span class="title">func</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">  <span class="type">int</span> ret = <span class="number">1</span> + <span class="number">2</span> + x;</span><br><span class="line">  <span class="keyword">return</span> ret;</span><br><span class="line">&#125;<span class="comment">//错误写法</span></span><br><span class="line"><span class="function"><span class="keyword">constexpr</span> <span class="type">int</span> <span class="title">func</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">  <span class="comment">//可以添加 using 执行、typedef 语句以及 static_assert 断言</span></span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span> + <span class="number">2</span> + x;</span><br><span class="line">&#125;<span class="comment">//正确写法</span></span><br></pre></td></tr></table></figure></div>
+
+<p>二、<strong>该函数必须有返回值，并且类型不能是<code>void</code></strong></p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">constexpr</span> <span class="type">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//函数体</span></span><br><span class="line">&#125;<span class="comment">//错误，通过此函数无法获得一个常量</span></span><br></pre></td></tr></table></figure></div>
+
+<p>三、<strong>函数在使用之前，必须有对应的定义语句。</strong><br>对于其他的函数来说，在使用时前给出声明即可，并不需要在给出定义。但是对于常量表达式函数来说，由于其返回值会在编译过程中进行计算，所以使用之前一定需要知道函数具体的定义。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="comment">//普通函数的声明</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">noconst_func</span><span class="params">(<span class="type">int</span> x)</span></span>;</span><br><span class="line"><span class="comment">//常量表达式函数的声明</span></span><br><span class="line"><span class="function"><span class="keyword">constexpr</span> <span class="type">int</span> <span class="title">func</span><span class="params">(<span class="type">int</span> x)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//常量表达式函数的定义</span></span><br><span class="line"><span class="function"><span class="keyword">constexpr</span> <span class="type">int</span> <span class="title">func</span><span class="params">(<span class="type">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> + <span class="number">2</span> + x;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//调用常量表达式函数</span></span><br><span class="line">    <span class="type">int</span> a[<span class="built_in">func</span>(<span class="number">3</span>)] = &#123; <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span> &#125;;</span><br><span class="line">    cout &lt;&lt; a[<span class="number">2</span>] &lt;&lt; endl;</span><br><span class="line">    <span class="comment">//调用普通函数</span></span><br><span class="line">    cout &lt;&lt; <span class="built_in">noconst_func</span>(<span class="number">3</span>) &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//普通函数的定义</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">noconst_func</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> + <span class="number">2</span> + x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>四、**<code>return</code>返回的表达式必须是常量表达式**</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> num = <span class="number">3</span>;</span><br><span class="line"><span class="function"><span class="keyword">constexpr</span> <span class="type">int</span> <span class="title">func</span><span class="params">(<span class="type">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> num + x;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//调用常量表达式函数</span></span><br><span class="line">    <span class="type">int</span> a[<span class="built_in">func</span>(<span class="number">3</span>)] = &#123; <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span> &#125;;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;<span class="comment">//error:func(3) 的结果不是常量</span></span><br></pre></td></tr></table></figure></div>
+
+<p>常量表达式函数的返回值必须是常量表达式的原因很简单，如果想在程序编译阶段获得某个函数返回的常量，则该函数的<code>return</code>语句中就不能包含程序运行阶段才能确定值的变量(上述代码中的<code>num</code>)。</p>
+<p><strong>注：在常量表达式函数的<code>return</code>语句中，不能包含赋值的操作（例如 <code>return x=1</code> 在常量表达式函数中不允许的）。另外，用 <code>constexpr</code> 修改函数时，函数本身也是支持递归的。</strong></p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">constexpr</span> <span class="type">int</span> <span class="title">fact</span><span class="params">(<span class="type">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 递归求阶乘</span></span><br><span class="line">    <span class="keyword">return</span> n == <span class="number">1</span> ? <span class="number">1</span> : n * <span class="built_in">fact</span>(n - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="3-constexpr修饰类的构造函数"><a href="#3-constexpr修饰类的构造函数" class="headerlink" title="3.constexpr修饰类的构造函数"></a>3.<code>constexpr</code>修饰类的构造函数</h2><p>对于 C++ 内置类型的数据，可以直接用<code>constexpr</code>修饰，但如果是自定义的数据类型（结构体或者类），是不可以直接用<code>constexpr</code>修饰的。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="comment">//自定义类型的定义</span></span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">struct</span> <span class="title class_">myType</span> &#123;</span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* name;</span><br><span class="line">    <span class="type">int</span> age;</span><br><span class="line">    <span class="comment">//其它结构体成员</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">constexpr</span> <span class="keyword">struct</span> <span class="title class_">myType</span> mt &#123; <span class="string">&quot;zhangsan&quot;</span>, <span class="number">10</span> &#125;;</span><br><span class="line">    cout &lt;&lt; mt.name &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; mt.age &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;<span class="comment">//error:constexpr不能修饰自定义类型</span></span><br></pre></td></tr></table></figure></div>
+
+<p>为了自定义一个可以产生常量的类型，可以在该类型的内部添加一个常量构造函数。将上述错误例程修改如下：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="comment">//自定义类型的定义</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">myType</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">constexpr</span> <span class="title">myType</span><span class="params">(<span class="type">char</span> *name,<span class="type">int</span> age)</span>:name(name),age(age)&#123;</span>&#125;;</span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* name;</span><br><span class="line">    <span class="type">int</span> age;</span><br><span class="line">    <span class="comment">//其它结构体成员</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">constexpr</span> <span class="keyword">struct</span> <span class="title class_">myType</span> mt &#123; <span class="string">&quot;shiszhi&quot;</span>, <span class="number">20</span> &#125;;</span><br><span class="line">    cout &lt;&lt; mt.name &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; mt.age &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;<span class="comment">//output:shiszhi 20</span></span><br></pre></td></tr></table></figure></div>
+
+<p>注意: <strong><code>constexpr</code>修饰类的构造函数时，要求该构造函数的函数体必须为空，且采用初始化列表的方式为各个成员赋值时，必须使用常量表达式。</strong><br>前面提到，<code>constexpr</code>可用于修饰函数，当然也可以修饰类内的成员函数，只要满足上述四个条件即可。不过需要注意的是，<strong>在C++11标准中，不支持用<code>constexpr</code>修饰带有<code>virtual</code>的成员方法。</strong></p>
+<h2 id="4-constexpr修饰模板函数"><a href="#4-constexpr修饰模板函数" class="headerlink" title="4.constexpr修饰模板函数"></a>4.<code>constexpr</code>修饰模板函数</h2><p>C++11语法中，<code>constexpr</code>可以修饰模板函数，但由于模板中类型的不确定性，因此模板函数实例化后的函数是否符合常量表达式函数的要求也是不确定的。<br>针对这种情况，C++11标准规定，如果<code>constexpr</code>修饰的模板函数实例化结果不满足常量表达式函数的要求，则<code>constexpr</code>会被自动忽略，即该函数就等同于一个普通函数。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="comment">//自定义类型的定义</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">myType</span> &#123;</span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* name;</span><br><span class="line">    <span class="type">int</span> age;</span><br><span class="line">    <span class="comment">//其它结构体成员</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//模板函数</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">constexpr</span> T <span class="title">display</span><span class="params">(T t)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">myType</span> stu&#123;<span class="string">&quot;shiszhi&quot;</span>, <span class="number">20</span>&#125;;</span><br><span class="line">    <span class="comment">//普通函数,stu未定义常量表达式构造函数</span></span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">myType</span> ret = <span class="built_in">display</span>(stu);</span><br><span class="line">    cout &lt;&lt; ret.name &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; ret.age &lt;&lt; endl;</span><br><span class="line">    <span class="comment">//常量表达式函数</span></span><br><span class="line">    <span class="keyword">constexpr</span> <span class="type">int</span> ret1 = <span class="built_in">display</span>(<span class="number">20</span>);</span><br><span class="line">    cout &lt;&lt; ret1 &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5.总结"></a>5.总结</h2><p>《Effective Modern C++》中提到：只要有可能使用<code>constexpr</code>，就使用它。比起非<code>constexpr</code>对象或者<code>constexpr</code>函数而言，<code>constexpr</code>对象或者<code>constexpr</code>函数可以用在一个作用域更广的语境中。</p>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>Post title：C++关键字之constexpr</li>
+        <li>Post author：Shiszhi</li>
+        <li>Create time：2022-12-06 19:13:21</li>
+        <li>
+            Post link：https://shis-zhi.github.io/2022/12/06/C++关键字之constexpr/
+        </li>
+        <li>
+            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/C/">#C++</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+            <div class="article-nav">
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/12/06/C++%E5%85%B3%E9%94%AE%E5%AD%97%E4%B9%8Bexplicit/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">C++关键字之explicit</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2020</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Shiszhi</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v0.3.4</a>
+        </div>
+        
+        
+    </div>
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fa-duotone fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div style="font-size: 1.3rem;margin-top: 0; margin-bottom: 0.8rem; transition-duration: 0.1s;"><i class="fa-solid fa-list-tree"></i> <strong>Contents</strong></div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-constexpr%E4%BF%AE%E9%A5%B0%E6%99%AE%E9%80%9A%E5%8F%98%E9%87%8F"><span class="nav-text">1.constexpr修饰普通变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-constexpr%E4%BF%AE%E9%A5%B0%E5%87%BD%E6%95%B0"><span class="nav-text">2.constexpr修饰函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-constexpr%E4%BF%AE%E9%A5%B0%E7%B1%BB%E7%9A%84%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-text">3.constexpr修饰类的构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-constexpr%E4%BF%AE%E9%A5%B0%E6%A8%A1%E6%9D%BF%E5%87%BD%E6%95%B0"><span class="nav-text">4.constexpr修饰模板函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E6%80%BB%E7%BB%93"><span class="nav-text">5.总结</span></a></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            REDEFINE.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            REDEFINE.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            REDEFINE.refresh();
+        });
+    });
+</script>
+
+
+
+</body>
+</html>
