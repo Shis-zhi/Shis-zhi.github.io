@@ -67,7 +67,8 @@
   <entry>
     <title>FFmpeg之FFmpeg简介</title>
     <url>/2022/12/07/FFmpeg%E4%B9%8BFFmpeg%E7%AE%80%E4%BB%8B/</url>
-    <content><![CDATA[<h2 id="1-FFmpeg定义"><a href="#1-FFmpeg定义" class="headerlink" title="1. FFmpeg定义"></a>1. FFmpeg定义</h2><p>FFmpeg是一款音视频编解码工具，同时也是一组音视频编解码开发套件，为开发者提供了丰富的音视频处理的调用接口。</p>
+    <content><![CDATA[<h2 id="1-FFmpeg定义"><a href="#1-FFmpeg定义" class="headerlink" title="1. FFmpeg定义"></a>1. FFmpeg定义</h2><p>FFmpeg是一款音视频编解码工具，同时也是一组音视频编解码开发套件，为开发者提供了丰富的音视频处理的调用接口。<br>FFmpeg提供了多种媒体格式的封装和解封装，包括多种音视频解码、多种协议的流媒体、多种色彩格式转换、多种采样率转换、多种码率转换等；FFmpeg框架提供了多种丰富的插件模块，包含封装与解封装的插件、编码与解码的插件等。；</p>
+<h2 id="2-FFmpeg的基本组成"><a href="#2-FFmpeg的基本组成" class="headerlink" title="2. FFmpeg的基本组成"></a>2. FFmpeg的基本组成</h2><p><img lazyload src="/images/loading.svg" data-src="/2022/12/07/FFmpeg%E4%B9%8BFFmpeg%E7%AE%80%E4%BB%8B/1.1.png"></p>
 ]]></content>
       <tags>
         <tag>FFmpeg</tag>
