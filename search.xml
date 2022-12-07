@@ -67,8 +67,68 @@
   <entry>
     <title>FFmpeg之FFmpeg简介</title>
     <url>/2022/12/07/FFmpeg%E4%B9%8BFFmpeg%E7%AE%80%E4%BB%8B/</url>
-    <content><![CDATA[<h2 id="1-FFmpeg定义"><a href="#1-FFmpeg定义" class="headerlink" title="1. FFmpeg定义"></a>1. FFmpeg定义</h2><p>FFmpeg是一款音视频编解码工具，同时也是一组音视频编解码开发套件，为开发者提供了丰富的音视频处理的调用接口。<br>FFmpeg提供了多种媒体格式的封装和解封装，包括多种音视频解码、多种协议的流媒体、多种色彩格式转换、多种采样率转换、多种码率转换等；FFmpeg框架提供了多种丰富的插件模块，包含封装与解封装的插件、编码与解码的插件等。；</p>
-<h2 id="2-FFmpeg的基本组成"><a href="#2-FFmpeg的基本组成" class="headerlink" title="2. FFmpeg的基本组成"></a>2. FFmpeg的基本组成</h2><p><img lazyload src="/images/loading.svg" data-src="/2022/12/07/FFmpeg%E4%B9%8BFFmpeg%E7%AE%80%E4%BB%8B/1.1.png"></p>
+    <content><![CDATA[<h2 id="1-FFmpeg定义"><a href="#1-FFmpeg定义" class="headerlink" title="1. FFmpeg定义"></a>1. FFmpeg定义</h2><p>FFmpeg是一款音视频编解码工具，同时也是一组音视频编解码开发套件，为开发者提供了丰富的音视频处理的调用接口。<br>FFmpeg提供了多种媒体格式的封装和解封装，包括多种音视频解码、多种协议的流媒体、多种色彩格式转换、多种采样率转换、多种码率转换等；FFmpeg框架提供了多种丰富的插件模块，包含封装与解封装的插件、编码与解码的插件等。</p>
+<h2 id="2-FFmpeg的基本组成"><a href="#2-FFmpeg的基本组成" class="headerlink" title="2. FFmpeg的基本组成"></a>2. FFmpeg的基本组成</h2><p>FFmpeg框架的基本组成包含<code>AVFormat</code>、<code>AVCodec</code>、<code>AVFilter</code>、<code>AVDevice</code>、<code>AVUtil</code>等模块，结构图如下：<br><img lazyload src="/images/loading.svg" data-src="/2022/12/07/FFmpeg%E4%B9%8BFFmpeg%E7%AE%80%E4%BB%8B/2-1.png" alt="图2-1 FFmpeg基本组成模块"></p>
+<ol>
+<li><strong>FFmpeg的封装模块AVFormat</strong><br>AVFormat中实现了目前多媒体领域中的绝大多数媒体封装格式，包括封装和解封装，如MP4、FLV、KV、TS等文件封装格式，RTMP、RTSP、MMS、HLS等网络协议封装格式。<br>FFmpeg是否支持某种媒体封装格式，取决于编译时是否包含了该格式的封装库、根据实际需求可以进行媒体封装格式的扩展，增加自己定制的封装格式。</li>
+<li><strong>FFmpeg的编解码模块AVCodec</strong><br>AVCodec中实现了目前多媒体领域绝大多数常用的编解码格式，既支持编码，也支持解码。<br>AVCodec除了支持MPEG4、AAC、MJPEG等自带的媒体编解码格式之外，还支持第三方编解码器。<br>如果希望增加自己的编码格式，或者硬件编解码，则需要在AVCodec中增加相应的编解码模块。</li>
+<li><strong>FFmpeg的滤镜模块AVFilter</strong><br>AVFilter库提供了一个通用的音频、视频、字幕等滤镜处理框架。在AVFilter中，滤镜框架可以有多个输入和多个输出。可以参考以下示例：<br><img lazyload src="/images/loading.svg" data-src="/2022/12/07/FFmpeg%E4%B9%8BFFmpeg%E7%AE%80%E4%BB%8B/2-2.png" alt="图2-2 AVFilter使用样例"><br>上图中所示的滤镜处理将输入的视频切割成了两部分流，一部分流抛给crop滤镜与vflip滤镜处理模块进行操作，另一部分保持原样，当crop滤镜与vflip滤镜处理操作完成之后，将流合并到原有的overlay图层中，并显示在最上一层，输出新的视频。对应的命令如下：</li>
+</ol>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">ffmpeg -i INPUT -vf &quot;split [main][tmp]; [tmp] crop=iw:ih/2:0:0, vflip [flip]; [main][flip] overlay=0:H/2&quot; OUTPUT</span><br></pre></td></tr></table></figure></div>
+
+<p>下面详细说明一下规则，具体如下：</p>
+<ul>
+<li>相同的Filter线性链之间用逗号分隔</li>
+<li>不同的Filter线性链之间用分号分隔</li>
+</ul>
+<p>在上述示例中，crop与vflip使用的是同一个滤镜处理的线性链，split滤镜和overlay滤镜使用的是另外一个线性链，一个线性链与另一个线性链汇合时时通过方括号<code>[]</code>括起来的标签进行标识的。<br>4. <strong>FFmpeg的视频图像转换计算模块swscale</strong><br>swscale模块提供高级别的图像转换API，允许其进行图像缩放和像素格式转换。<br>例如：将图像从1080P转换成720P或者480P等的缩放，或者将图像数据从YUV420P转换成YUYV等的转换。<br>5. <strong>FFmpeg的音频转换计算模块swresample</strong><br>swresample模块提供了高级别的音频重采样API。例如它允许操作音频采样、音频通道布局转换与布局调整。</p>
+<h2 id="3-FFmpeg的编解码工具ffmpeg"><a href="#3-FFmpeg的编解码工具ffmpeg" class="headerlink" title="3. FFmpeg的编解码工具ffmpeg"></a>3. <strong>FFmpeg的编解码工具ffmpeg</strong></h2><p>一个简单的例子：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">ffmpeg -i input.mp4 output.avi</span><br></pre></td></tr></table></figure></div>
+
+<p>这条简单的命令通过<code>-i</code>指定输入源，然后进行转码和转封装，将结果输出到<code>output.avi</code>中，这条命令主要进行以下流程：</p>
+<ol>
+<li>获得输入源<code>input.mp4</code></li>
+<li>转码、转封装</li>
+<li>输出文件<code>output.avi</code></li>
+</ol>
+<p>下面这条命令和上面的命令具有类似的作用：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">ffmpeg -i input.mp4 -f avi output.dat</span><br></pre></td></tr></table></figure></div>
+
+<p>此命令通过<code>-f</code>选项指定输出文件的容器格式，两条命令输出的文件名不同，除此之外完全相同。</p>
+<p>ffmpeg的主要工作流程如下：</p>
+<ol>
+<li>解封装(Demuxing)</li>
+<li>解码(Decoding)</li>
+<li>编码(Encoding)</li>
+<li>封装(Muxing)</li>
+</ol>
+<p>其中需要经过六个步骤，分别为：</p>
+<ol>
+<li>读取输入源</li>
+<li>进行音视频的解封装</li>
+<li>解码每一帧音视频数据</li>
+<li>编码每一帧音视频数据</li>
+<li>进行音视频的重新封装</li>
+<li>输出到目标</li>
+</ol>
+<p><img lazyload src="/images/loading.svg" data-src="/2022/12/07/FFmpeg%E4%B9%8BFFmpeg%E7%AE%80%E4%BB%8B/3-1.png" alt="图3-1 ffmpeg转码工作流程"><br>在上图所示的工作流程中可以看出：ffmpeg首先读取输入源，然后通过Demuxer进行解封装（通过调用<code>libavformat</code>中的接口实现），然后通过Decoder进行解码（通过调用<code>libavcodec</code>中的接口实现），然后通过Encoder将对应的数据进行编码（通过调用<code>libavcodec</code>中的接口实现），接下来将编码后的音视频数据包通过Muxer进行封装（通过调用<code>libavformat</code>中的接口实现），输出称为输出流。</p>
+<h2 id="4-FFmpeg的播放器ffplay"><a href="#4-FFmpeg的播放器ffplay" class="headerlink" title="4. FFmpeg的播放器ffplay"></a>4. FFmpeg的播放器ffplay</h2><p>ffplay为FFmpeg提供的播放器，使用FFmpeg的<code>avformat</code>与<code>avcodec</code>可以播放各种媒体文件或流。如果要使用ffplay，需要系统有各种SDL(Simple DirectMedia Layer)提供基础支撑。<br>ffmpeg提供了音视频显示和播放相关的图像信息、音频的波形信息等。</p>
+<h2 id="5-Ffmpeg的多媒体分析器ffprobe"><a href="#5-Ffmpeg的多媒体分析器ffprobe" class="headerlink" title="5. Ffmpeg的多媒体分析器ffprobe"></a>5. Ffmpeg的多媒体分析器ffprobe</h2><p>ffprobe可以从媒体文件或者媒体流中获得想要了解的媒体信息，比如音频的参数、视频的参数、媒体容器的参数信息等。<br>其可以帮助分析某个媒体容器中的音频是什么编码格式、视频是什么编码格式，同时可以得到媒体文件中媒体的总时长、复合码率等信息。除此之外也可以分析媒体文件中每个包的长度、包的类型、帧的信息等。</p>
+<h2 id="6-FFmpeg编码支持与定制"><a href="#6-FFmpeg编码支持与定制" class="headerlink" title="6. FFmpeg编码支持与定制"></a>6. FFmpeg编码支持与定制</h2><h3 id="6-1-FFmpeg的编解码器支持"><a href="#6-1-FFmpeg的编解码器支持" class="headerlink" title="6.1. FFmpeg的编解码器支持"></a>6.1. FFmpeg的编解码器支持</h3><p>编码器支持：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">ffmpeg -encoders</span><br></pre></td></tr></table></figure></div>
+
+<p>解码器支持：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">ffmpeg -decoders</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="6-2-FFmpeg的封装及解封装支持"><a href="#6-2-FFmpeg的封装及解封装支持" class="headerlink" title="6.2. FFmpeg的封装及解封装支持"></a>6.2. FFmpeg的封装及解封装支持</h3><p>封装支持</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">ffmpeg -muxers</span><br></pre></td></tr></table></figure></div>
+
+<p>解封装支持</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">ffmpeg -demuxers</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="6-3-FFmpeg的通信协议支持"><a href="#6-3-FFmpeg的通信协议支持" class="headerlink" title="6.3. FFmpeg的通信协议支持"></a>6.3. FFmpeg的通信协议支持</h3><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">ffmpeg -protocols</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="7-小结"><a href="#7-小结" class="headerlink" title="7.小结"></a>7.小结</h2><p>本文主要介绍了FFmpeg的一些基础知识，重点在整个音视频处理流程以及对流媒体传输协议的支持。</p>
 ]]></content>
       <tags>
         <tag>FFmpeg</tag>
