@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    <meta name="description" content="Hexo Theme Redefine">
+    <meta name="author" content="Shiszhi">
+    
+    <title>
+        
+            WebRTC基础之RTP/RTCP |
+        
+        Shiszhi&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/css/v5-font-face.min.css">
+
+    
+<link rel="stylesheet" href="/css/duotone.min.css">
+
+    
+<link rel="stylesheet" href="/css/brands.min.css">
+
+    
+<link rel="stylesheet" href="/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/css/brands.min.css">
+
+    
+<link rel="stylesheet" href="/css/css2.css">
+
+    <link rel="stylesheet" href="//evan.beee.top/css/waline.css"/>
+    <script src="//evan.beee.top/js/waline.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script id="hexo-configurations">
+    let REDEFINE = window.REDEFINE || {};
+    REDEFINE.hexo_config = {"hostname":"shis-zhi.github.io","root":"/","language":"en","path":"search.xml"};
+    REDEFINE.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#005080","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"240px","content_max_width":"960px","nav_color":{"left":"#f78736","right":"#367df7","transparency":35},"hover":{"shadow":true,"scale":false},"first_screen":{"enable":true,"background_image":{"light":"https://img-blog.csdnimg.cn/20210120123514329.jpg","dark":"https://img-blog.csdnimg.cn/20210120123514329.jpg"},"title_color":{"light":"#fff","dark":"#323739"},"description":""},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true},"pjax":{"enable":true},"lazyload":{"enable":true},"version":"0.3.4"};
+    REDEFINE.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fas fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+    
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                Shiszhi&#39;s Blog
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">TAGS</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation"><h1 style="font-size:2rem; font-weight: bold; margin: 10px 0;">WebRTC基础之RTP/RTCP</h1></span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/avatar.svg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Shiszhi</span>
+                        
+                            <span class="author-label">lol</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-duotone fa-pen-line"></i>&nbsp;
+        <span class="pc">2022-12-08 20:20:14</span>
+        <span class="mobile">2022-12-08 20:20</span>
+    </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-duotone fa-tags"></i></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/WebRTC%E5%9F%BA%E7%A1%80/">WebRTC基础</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>2.2k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>9 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h2 id="1-RTP-Header扩展-Transport-sequence-number"><a href="#1-RTP-Header扩展-Transport-sequence-number" class="headerlink" title="1. RTP Header扩展 - Transport sequence number"></a>1. RTP Header扩展 - Transport sequence number</h2><p>下面是RTP固定报头结构：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> 0                   1                   2                   3</span><br><span class="line"> 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">|V=2|P|X|  CC   |M|     PT      |       sequence number         |</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">|                           timestamp                           |</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">|           synchronization source (SSRC) identifier            |</span><br><span class="line">+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+</span><br><span class="line">|            contributing source (CSRC) identifiers             |</span><br><span class="line">|                             ....                              |</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br></pre></td></tr></table></figure></div>
+
+<p>报头中的<code>sequence number</code>字段用于记录RTP包的序列号。一般情况下一个传输通道（PeerConnection）只包含一路视频流，这个<code>sequence number</code>可以满足大多数需求。但某些情况下，一个连接可能传输多个视频流，这些视频流复用一个传输通道。此时一个PeerConnection可能包含多个不同的视频流。在这些视频流中，RTP报头的<code>sequence number</code>是单独计数的。</p>
+<p>假设同一个PeerConnection下，我们传输两个视频流A与B，它们的RTP包记为Ra(n)，Rb(n)，n表示<code>sequence number</code>。<br>这样我们观察同一个PeerConnection下，视频流按如下形式传输： Ra(1),Ra(2),Rb(1),Rb(2),Ra(3),Ra(4),Rb(3),Rb(4)</p>
+<p>在对某条PeerConnection进行带宽估计时，我们需要估计整条PeerConnection下所有视频流，而不是单独某个流。这样为了做一个RTP session（传输层）级别的带宽估计，原有各个流的<code>sequence number</code>就不能满足我们需要了，需要使用RTP报头扩展用于记录<code>transport sequence number</code>，同一个PeerConnection连接下的所有流的<code>transport sequence number</code>，使用统一的计数器进行计数，方便进行同一个PeerConnection下的带宽估计。</p>
+<p>仍使用上面的例子，视频流A与B，它们的RTP包记为Ra(n，m)，Rb(n,m)，n表示<code>sequence number</code>，m表示<code>transport sequence number</code>。<br>这样同一个PeerConnection下，视频流按如下形式传输： Ra(1,1),Ra(2,2),Rb(1,3),Rb(2,4),Ra(3,5),Ra(4,6),Rb(3,7),Rb(4,8)</p>
+<p>RTP <code>transport sequence number</code>报头定义如下：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> 0                   1                   2                   3</span><br><span class="line"> 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">|       0xBE    |    0xDE       |           length=1            |</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">|  ID   | L=1   |transport-wide sequence number | zero padding  |</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br></pre></td></tr></table></figure></div>
+
+<p>由于属于RTP报头扩展，所以可以看到以<code>0xBEDE</code>固定字段开头，表示One-Byte Header类型的扩展。<code>transport sequence number</code>占两个字节，存储在One-Byte Header的<code>Extension data</code>字段。由于按4字节对齐，所以还有值为0的填充数据。</p>
+<h2 id="2-TransportFeedback-RTCP"><a href="#2-TransportFeedback-RTCP" class="headerlink" title="2. TransportFeedback RTCP"></a>2. TransportFeedback RTCP</h2><p>Transport-cc中，收流客户端通过TransportFeedback RTCP向发送端反馈收到的各个RTP包的到达时间信息。<br>下面是TransportFeedback包的格式：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">    0                   1                   2                   3</span><br><span class="line">    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1</span><br><span class="line">   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">   |V=2|P|  FMT=15 |    PT=205     |           length              |</span><br><span class="line">   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line"> 0 |                     SSRC of packet sender                     |</span><br><span class="line">   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line"> 4 |                      SSRC of media source                     |</span><br><span class="line">   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line"> 8 |      base sequence number     |      packet status count      |</span><br><span class="line">   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">12 |                 reference time                | fb pkt. count |</span><br><span class="line">   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">16 |          packet chunk         |         packet chunk          |</span><br><span class="line">   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">   .                                                               .</span><br><span class="line">   .                                                               .</span><br><span class="line">   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">   |         packet chunk          |  recv delta   |  recv delta   |</span><br><span class="line">   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">   .                                                               .</span><br><span class="line">   .                                                               .</span><br><span class="line">   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">   |           recv delta          |  recv delta   | zero padding  |</span><br><span class="line">   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li><code>base sequence number</code>:2字节，TransportFeedback包中记录的第一个RTP包的<code>transport sequence number</code>，在反馈的各个TransportFeedback RTCP包中，这个字段不一定是递增的，也有可能比之前的RTCP包小</li>
+<li><code>packet status count</code>:2字节，表示这个TransportFeedback包记录了多少个RTP包信息，这些RTP的<code>transport sequence number</code>以<code>base sequence number</code>为基准，比如记录的第一个RTP包的<code>transport sequence number</code>为<code>base sequence number</code>，那么记录的第二个RTP包<code>transport sequence number</code>为<code>base sequence number+1</code></li>
+<li><code>reference time</code>:3字节，表示参考时间，以64ms为单位，RTCP包记录的RTP包到达时间信息以这个<code>reference time</code>为基准进行计算</li>
+<li><code>feedback packet count</code>:1字节，用于计数发送的每个TransportFeedback包，相当于RTCP包的序列号。可用于检测TransportFeedback包的丢包情况</li>
+<li><code>packet chunk</code>:2字节，记录RTP包的到达状态，记录的这些RTP包<code>transport sequence number</code>通过<code>base sequence number</code>计算得到</li>
+<li><code>recv delta</code>: 1字节，对于<code>packet received</code>状态的包，也就是收到的RTP包，在<code>recv delta</code>列表中添加对应的的到达时间间隔信息，用于记录RTP包到达时间信息。通过前面的<code>reference time</code>以及<code>recv delta</code>信息，我们就可以得到RTP包到达时间</li>
+</ul>
+<h3 id="2-1-Packet-Chunk"><a href="#2-1-Packet-Chunk" class="headerlink" title="2.1 Packet Chunk"></a>2.1 Packet Chunk</h3><p>首先先了解下RTP包状态，目前定义了如下四种状态，每个状态值2bits，用来标识RTP包的到达状态，以及与前面RTP包的时间间隔大小信息：</p>
+<ul>
+<li>00-Packet not received</li>
+<li>01-Packet received, small delta</li>
+<li>10-Packet received, large or negative delta</li>
+<li>11-[Reserved]<br><code>packet chunk</code>有两种类型，<code>Run length chunk</code>（行程长度编码数据块）与<code>Status vector chunk</code>（状态矢量编码数据块），对应<code>packet chunk</code>结构的两种编码方式。packet chunk的第一个bit标识chunk类型。</li>
+</ul>
+<h4 id="2-1-1-Run-length-chunk"><a href="#2-1-1-Run-length-chunk" class="headerlink" title="2.1.1 Run length chunk"></a>2.1.1 Run length chunk</h4><p>Run length编码是一种数据压缩算法，其基本思想是将重复且连续出现多次的字符使用“连续出现次数+字符”来描述，例如：aaabbbcdddd通过Run length编码就可以压缩为3a3bc4d。Run length chunk中使用了Run length编码标识连续多个相同状态的包。<br>Run length chunk第一bit为0，后面跟着packet status以及run length。格式如下：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> 0                   1</span><br><span class="line"> 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">|T| S |       Run Length        |</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li><code>chunk type (T)</code>:1 bit，值为0</li>
+<li><code>packet status symbol (S)</code>:2 bits，标识包状态</li>
+<li><code>run length (L)</code>:13 bits，行程长度，标识有多少个连续包为相同状态</li>
+</ul>
+<p>举例如下：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> 0                   1</span><br><span class="line"> 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">|0|0 0|0 0 0 0 0 1 1 0 1 1 1 0 1|</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br></pre></td></tr></table></figure></div>
+
+<p><code>packet status</code>为00，由前面包状态可知为<code>Packet not received</code>状态，<code>run length</code>为221（11011101），说明连续有221个包为<code>Packet not received</code>状态。</p>
+<h4 id="2-1-2-Status-Vector-Chunk"><a href="#2-1-2-Status-Vector-Chunk" class="headerlink" title="2.1.2 Status Vector Chunk"></a>2.1.2 Status Vector Chunk</h4><p>第一bit为1，后面跟着symbol size以及symbol list。格式如下：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> 0                   1</span><br><span class="line"> 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">|T|S|       symbol list         |</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li><code>chunk type (T)</code>:1 bit，值为1</li>
+<li><code>symbol size(S)</code>:1 bit，为0表示只包含<code>packet not received</code>以及<code>packet received</code>状态，每个状态使用1bit表示，这样后面14bits的<code>symbol list</code>能标识14个包的状态。为1表示使用2bits来标识包状态，这样<code>symbol list</code>中我们只能标识7个包的状态</li>
+<li><code>symbol list</code>:14 bits，标识一系列包的状态, 总共能标识7或14个包的状态</li>
+</ul>
+<p>举例如下：</p>
+<ol>
+<li>例一：</li>
+</ol>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> 0                   1</span><br><span class="line"> 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">|1|0|0 1 1 1 1 1 0 0 0 1 1 1 0 0|</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br></pre></td></tr></table></figure></div>
+
+<p><code>symbol size</code>为0，这样能标识14个包的状态。第一个包状态为<code>packet not received</code>，接着后面5个包状态为<code>packet received</code>，再接着三个包状态为<code>packet not received</code>，再接着三个包状态为<code>packet received</code>，最后两个包状态为<code>packet not received</code>。<br>2. 例二：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> 0                   1</span><br><span class="line"> 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">|1|1|0 0 1 1 0 1 0 1 0 1 0 0 0 0|</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br></pre></td></tr></table></figure></div>
+
+<p><code>symbol size</code>为1，这样只能标识7个包的状态。第一个包为<code>packet not received</code>状态，第二个包为<code>packet received, w/o timestamp</code>状态，再接着三个包为<code>packet received</code>状态，最后两个包为<code>packet not received</code>状态。</p>
+<h3 id="2-2-Receive-Delta"><a href="#2-2-Receive-Delta" class="headerlink" title="2.2 Receive Delta"></a>2.2 Receive Delta</h3><p>以250us(0.25ms)为单位，表示RTP包到达时间与前面一个RTP包到达时间的间隔，对于记录的第一个RTP包，该包的时间间隔是相对reference time的。</p>
+<ul>
+<li>如果在<code>packet chunk</code>记录了一个<code>Packet received, small delta</code>状态的包，那么就会在<code>receive delta</code>列表中添加一个无符号1字节长度<code>receive delta</code>，无符号1字节取值范围$[0,255]$，由于<code>Receive Delta</code>以0.25ms为单位，故此时<code>Receive Delta</code>取值范围$[0, 63.75]$ms</li>
+<li>如果在<code>packet chunk</code>记录了一个<code>Packet received, large or negative delta</code>状态的包，那么就会在<code>receive delta</code>列表中添加一个有符号2字节长度的<code>receive delta</code>，范围$[-8192.0, 8191.75]$ms</li>
+<li>如果时间间隔超过了最大限制，那么就会构建一个新的TransportFeedback RTCP包，由于<code>reference time</code>长度为3字节，所以目前的包中3字节长度能够覆盖很大范围了<br>以上说明总结起来就是：对于收到的RTP包在TransportFeedback RTCP <code>receive delta</code>列表中通过时间间隔记录到达时间，如果与前面包时间间隔小，那么使用1字节表示，否则2字节，超过最大取值范围，就另起新RTCP包了。<br>对于<code>Packet received, small delta</code>状态的包来说，<code>receive delta</code>最大值63.75ms，那么一秒时间跨度最少能标识1000&#x2F;63.75~&#x3D;16个包。由于<code>receive delta</code>为250us的倍数，所以一秒时间跨度最多能标识4000个包。<br><code>packet chunk</code>以及<code>receive delta</code>的使用是为了尽可能减小RTCP包大小。<code>packet chunk</code>用到了不同编码方式，对于收到的RTP包才添加到达时间信息，而且是通过时间间隔的方式记录到达时间。</li>
+</ul>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>Post title：WebRTC基础之RTP/RTCP</li>
+        <li>Post author：Shiszhi</li>
+        <li>Create time：2022-12-08 20:20:14</li>
+        <li>
+            Post link：https://shis-zhi.github.io/2022/12/08/WebRTC基础之RTP-RTCP/
+        </li>
+        <li>
+            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/WebRTC%E5%9F%BA%E7%A1%80/">#WebRTC基础</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+            <div class="article-nav">
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/12/07/FFmpeg%E4%B9%8BFFmpeg%E7%AE%80%E4%BB%8B/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">FFmpeg之FFmpeg简介</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2020</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Shiszhi</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v0.3.4</a>
+        </div>
+        
+        
+    </div>
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fa-duotone fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div style="font-size: 1.3rem;margin-top: 0; margin-bottom: 0.8rem; transition-duration: 0.1s;"><i class="fa-solid fa-list-tree"></i> <strong>Contents</strong></div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-RTP-Header%E6%89%A9%E5%B1%95-Transport-sequence-number"><span class="nav-text">1. RTP Header扩展 - Transport sequence number</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-TransportFeedback-RTCP"><span class="nav-text">2. TransportFeedback RTCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Packet-Chunk"><span class="nav-text">2.1 Packet Chunk</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-1-Run-length-chunk"><span class="nav-text">2.1.1 Run length chunk</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-2-Status-Vector-Chunk"><span class="nav-text">2.1.2 Status Vector Chunk</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Receive-Delta"><span class="nav-text">2.2 Receive Delta</span></a></li></ol></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            REDEFINE.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            REDEFINE.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            REDEFINE.refresh();
+        });
+    });
+</script>
+
+
+
+</body>
+</html>
