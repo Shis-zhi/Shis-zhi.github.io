@@ -362,8 +362,8 @@
 <p><code>symbol size</code>为1，这样只能标识7个包的状态。第一个包为<code>packet not received</code>状态，第二个包为<code>packet received, w/o timestamp</code>状态，再接着三个包为<code>packet received</code>状态，最后两个包为<code>packet not received</code>状态。</p>
 <h3 id="2-2-Receive-Delta"><a href="#2-2-Receive-Delta" class="headerlink" title="2.2 Receive Delta"></a>2.2 Receive Delta</h3><p>以250us(0.25ms)为单位，表示RTP包到达时间与前面一个RTP包到达时间的间隔，对于记录的第一个RTP包，该包的时间间隔是相对reference time的。</p>
 <ul>
-<li>如果在<code>packet chunk</code>记录了一个<code>Packet received, small delta</code>状态的包，那么就会在<code>receive delta</code>列表中添加一个无符号1字节长度<code>receive delta</code>，无符号1字节取值范围$[0,255]$，由于<code>Receive Delta</code>以0.25ms为单位，故此时<code>Receive Delta</code>取值范围$[0, 63.75]$ms</li>
-<li>如果在<code>packet chunk</code>记录了一个<code>Packet received, large or negative delta</code>状态的包，那么就会在<code>receive delta</code>列表中添加一个有符号2字节长度的<code>receive delta</code>，范围$[-8192.0, 8191.75]$ms</li>
+<li>如果在<code>packet chunk</code>记录了一个<code>Packet received, small delta</code>状态的包，那么就会在<code>receive delta</code>列表中添加一个无符号1字节长度<code>receive delta</code>，无符号1字节取值范围[0,255]，由于<code>Receive Delta</code>以0.25ms为单位，故此时<code>Receive Delta</code>取值范围[0, 63.75]ms</li>
+<li>如果在<code>packet chunk</code>记录了一个<code>Packet received, large or negative delta</code>状态的包，那么就会在<code>receive delta</code>列表中添加一个有符号2字节长度的<code>receive delta</code>，范围[-8192.0, 8191.75]ms</li>
 <li>如果时间间隔超过了最大限制，那么就会构建一个新的TransportFeedback RTCP包，由于<code>reference time</code>长度为3字节，所以目前的包中3字节长度能够覆盖很大范围了<br>以上说明总结起来就是：对于收到的RTP包在TransportFeedback RTCP <code>receive delta</code>列表中通过时间间隔记录到达时间，如果与前面包时间间隔小，那么使用1字节表示，否则2字节，超过最大取值范围，就另起新RTCP包了。<br>对于<code>Packet received, small delta</code>状态的包来说，<code>receive delta</code>最大值63.75ms，那么一秒时间跨度最少能标识1000&#x2F;63.75~&#x3D;16个包。由于<code>receive delta</code>为250us的倍数，所以一秒时间跨度最多能标识4000个包。<br><code>packet chunk</code>以及<code>receive delta</code>的使用是为了尽可能减小RTCP包大小。<code>packet chunk</code>用到了不同编码方式，对于收到的RTP包才添加到达时间信息，而且是通过时间间隔的方式记录到达时间。</li>
 </ul>
 ]]></content>
