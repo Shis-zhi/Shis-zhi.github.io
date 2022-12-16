@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    <meta name="description" content="Hexo Theme Redefine">
+    <meta name="author" content="Shiszhi">
+    
+    <title>
+        
+            C++STL之关联容器 |
+        
+        Shiszhi&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/css/v5-font-face.min.css">
+
+    
+<link rel="stylesheet" href="/css/duotone.min.css">
+
+    
+<link rel="stylesheet" href="/css/brands.min.css">
+
+    
+<link rel="stylesheet" href="/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/css/brands.min.css">
+
+    
+<link rel="stylesheet" href="/css/css2.css">
+
+    <link rel="stylesheet" href="//evan.beee.top/css/waline.css"/>
+    <script src="//evan.beee.top/js/waline.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script id="hexo-configurations">
+    let REDEFINE = window.REDEFINE || {};
+    REDEFINE.hexo_config = {"hostname":"shis-zhi.github.io","root":"/","language":"en","path":"search.xml"};
+    REDEFINE.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#005080","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"240px","content_max_width":"960px","nav_color":{"left":"#f78736","right":"#367df7","transparency":35},"hover":{"shadow":true,"scale":false},"first_screen":{"enable":true,"background_image":{"light":"https://img-blog.csdnimg.cn/20210120123514329.jpg","dark":"https://img-blog.csdnimg.cn/20210120123514329.jpg"},"title_color":{"light":"#fff","dark":"#323739"},"description":""},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true},"pjax":{"enable":true},"lazyload":{"enable":true},"version":"0.3.4"};
+    REDEFINE.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fas fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+    
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                Shiszhi&#39;s Blog
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">TAGS</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation"><h1 style="font-size:2rem; font-weight: bold; margin: 10px 0;">C++STL之关联容器</h1></span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/avatar.svg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Shiszhi</span>
+                        
+                            <span class="author-label">lol</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-duotone fa-pen-line"></i>&nbsp;
+        <span class="pc">2022-12-15 08:43:43</span>
+        <span class="mobile">2022-12-15 08:43</span>
+    </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-duotone fa-tags"></i></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/C-STL/">C++STL</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>1.9k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>7 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h2 id="1-关联容器概述"><a href="#1-关联容器概述" class="headerlink" title="1. 关联容器概述"></a>1. 关联容器概述</h2><p>关联容器主要用于查找操作，而查找操作主要通过其“关键字”进行。<br>关联容器又根据其自身的特点分为八种不同的容器，其主要的区别在于：</p>
+<ol>
+<li>仅包含关键字<code>key</code>还是包含键值对<code>key-value</code>，前者称为集合<code>set</code>，后者称为映射<code>map</code></li>
+<li>关键字<code>key</code>是否允许重复，如果允许重复则包含<code>multi-</code></li>
+<li>是否按照hash函数映射的方式组织元素，如果是，则加上<code>unordered-</code></li>
+</ol>
+<h2 id="2-集合set与多重集合multiset"><a href="#2-集合set与多重集合multiset" class="headerlink" title="2. 集合set与多重集合multiset"></a>2. 集合<code>set</code>与多重集合<code>multiset</code></h2><p><code>set</code>和<code>multiset</code>都定义在头文件<code>&lt;set&gt;</code>中，在构造过程中会自动按照关键字的大小初始化。如果出现多个值相同的元素，则<code>set</code>只会保留第一个元素，而<code>multiset</code>则可以同时保留多个相同值的元素。<br>默认情况下，<code>set</code>会将集合内的元素按照从小到大的顺序进行排列，也可以使用自定义或者C++STL提供的函数对象改变元素的排列方式。<br><strong>住：<code>set</code>不支持<code>at()</code>和<code>[]</code>操作。</strong></p>
+<h3 id="2-1-set与multiset的构造"><a href="#2-1-set与multiset的构造" class="headerlink" title="2.1.set与multiset的构造"></a>2.1.<code>set</code>与<code>multiset</code>的构造</h3><div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a[] = &#123;<span class="number">5</span>, <span class="number">3</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">7</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">5</span>&#125;;</span><br><span class="line"><span class="type">int</span> size = <span class="built_in">sizeof</span>(a)/<span class="built_in">sizeof</span>(<span class="type">int</span>);</span><br><span class="line"></span><br><span class="line">multiset&lt;<span class="type">int</span>&gt; s1;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;size;i++)&#123;</span><br><span class="line">  s1.<span class="built_in">insert</span>(a[i]);</span><br><span class="line">  <span class="comment">// s1的元素排列与插入的先后顺序无关，取决于元素本身的关键字大小</span></span><br><span class="line">  <span class="comment">// 默认按照关键字从小到大排列</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// s1:2 3 3 5 5 7 9 9</span></span><br><span class="line"></span><br><span class="line">multiset&lt;<span class="type">int</span>, less&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">s2</span>(s1);</span><br><span class="line"><span class="comment">// s2:2 3 3 5 5 7 9 9</span></span><br><span class="line"></span><br><span class="line"><span class="function">multiset&lt;<span class="type">int</span>&gt; <span class="title">s3</span><span class="params">(a,a+size)</span></span>;</span><br><span class="line"><span class="comment">// s3:2 3 3 5 5 7 9 9</span></span><br><span class="line"></span><br><span class="line">multiset&lt;<span class="type">int</span>,greater&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">s4</span>(a,a+size);</span><br><span class="line"><span class="comment">// s4:2 3 3 5 5 7 9 9</span></span><br><span class="line"></span><br><span class="line">set&lt;<span class="type">int</span>&gt; s5;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;size;i++)&#123;</span><br><span class="line">  s5.<span class="built_in">insert</span>(a[i]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// s5:2 3 5 7 9</span></span><br></pre></td></tr></table></figure></div>
+
+<p>其中<code>less&lt;int&gt;</code>和<code>greater&lt;int&gt;</code>为头文件<code>&lt;functional&gt;</code>中的预定义函数对象，用来指定集合中的元素是按照升序还是降序排列。</p>
+<h3 id="2-2-set与multiset的成员函数"><a href="#2-2-set与multiset的成员函数" class="headerlink" title="2.2. set与multiset的成员函数"></a>2.2. <code>set</code>与<code>multiset</code>的成员函数</h3><div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a[] = &#123;<span class="number">9</span>, <span class="number">3</span>, <span class="number">9</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">7</span>, <span class="number">3</span>&#125;;</span><br><span class="line"><span class="type">int</span> size = <span class="built_in">sizeof</span>(a)/<span class="built_in">sizeof</span>(<span class="type">int</span>);</span><br><span class="line">multiset&lt;<span class="type">int</span>&gt;<span class="built_in">s</span>(a,a+size);</span><br><span class="line"><span class="comment">// s:3 3 7 7 9 9 10</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出关键字9的前一个元素，即7</span></span><br><span class="line">cout &lt;&lt; *(--s.<span class="built_in">find</span>(<span class="number">9</span>)) &lt;&lt; endl;</span><br><span class="line"><span class="comment">// 输出关键字8的前一个元素</span></span><br><span class="line"><span class="comment">// 由于集合中没有关键字为8的元素，所以find()返回集合结尾的后面一个位置</span></span><br><span class="line"><span class="comment">// 整个语句返回集合的最后一个元素</span></span><br><span class="line">cout &lt;&lt; *(--s.<span class="built_in">find</span>(<span class="number">8</span>)) &lt;&lt; endl;</span><br><span class="line"><span class="comment">// 输出关键字9的个数</span></span><br><span class="line">cout &lt;&lt; s.<span class="built_in">count</span>(<span class="number">9</span>) &lt;&lt; endl;</span><br><span class="line"><span class="comment">//在从小到大的数组中，</span></span><br><span class="line"><span class="comment">// lower_bound(key)返回指向 &gt;=key 的元素的迭代器</span></span><br><span class="line"><span class="comment">// upper_bound(key)返回指向 &gt;key 的元素迭代器</span></span><br><span class="line">cout &lt;&lt; *s.<span class="built_in">lower_bound</span>(<span class="number">6</span>) &lt;&lt; endl;<span class="comment">// 7</span></span><br><span class="line">cout &lt;&lt; *s.<span class="built_in">upper_bound</span>(<span class="number">6</span>) &lt;&lt; endl;<span class="comment">// 7</span></span><br><span class="line">cout &lt;&lt; *s.<span class="built_in">lower_bound</span>(<span class="number">7</span>) &lt;&lt; endl;<span class="comment">// 7</span></span><br><span class="line">cout &lt;&lt; *s.<span class="built_in">upper_bound</span>(<span class="number">7</span>) &lt;&lt; endl;<span class="comment">// 9</span></span><br><span class="line"><span class="comment">// equal_range(key)以pair的形式</span></span><br><span class="line"><span class="comment">// 返回关键字 =key 的下界lower和上界upper迭代器</span></span><br><span class="line"><span class="comment">// 可以理解为返回值的.first为.lower_bound()</span></span><br><span class="line"><span class="comment">// .second为.upper_bound()</span></span><br><span class="line">cout &lt;&lt; *s.<span class="built_in">equal_range</span>(<span class="number">6</span>).first </span><br><span class="line">     &lt;&lt; *s.<span class="built_in">equal_range</span>(<span class="number">6</span>).second &lt;&lt; endl;<span class="comment">// 7, 7</span></span><br><span class="line">cout &lt;&lt; *s.<span class="built_in">equal_range</span>(<span class="number">7</span>).first </span><br><span class="line">     &lt;&lt; *s.<span class="built_in">equal_range</span>(<span class="number">7</span>).second &lt;&lt; endl;<span class="comment">// 7, 9</span></span><br><span class="line"><span class="comment">// 删除关键字3并返回3的个数</span></span><br><span class="line">cout &lt;&lt; s.<span class="built_in">erase</span>(<span class="number">3</span>) &lt;&lt; endl;<span class="comment">// 2 set:7 7 9 9 10</span></span><br><span class="line"><span class="comment">// 删除一个9</span></span><br><span class="line">s.<span class="built_in">erase</span>(s.<span class="built_in">find</span>(<span class="number">9</span>));<span class="comment">// set:7 7 9 10</span></span><br><span class="line"><span class="comment">// 删除所有7</span></span><br><span class="line">s.<span class="built_in">erase</span>(s.<span class="built_in">find</span>(<span class="number">7</span>));<span class="comment">// set:9 10</span></span><br><span class="line"><span class="comment">// 删除所有元素</span></span><br><span class="line">s.<span class="built_in">clear</span>();<span class="comment">// set: (none)</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="3-映射map与多重映射multimap"><a href="#3-映射map与多重映射multimap" class="headerlink" title="3.映射map与多重映射multimap"></a>3.映射<code>map</code>与多重映射<code>multimap</code></h2><p>映射<code>map</code>和多重映射<code>multimap</code>中的元素是由<code>key</code>和<code>value</code>所构成的键值对组成的，这个键值对的类型<code>value_type</code>是由<code>pair</code>所定义的：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> pair&lt;<span class="type">const</span> key,T&gt; value_type</span><br></pre></td></tr></table></figure></div>
+
+<p>在<code>map</code>的内部，根据关键字<code>key</code>来对元素进行排序和唯一性检查(<code>multimap</code>不进行唯一性检查)。<br>由于关键字的类型是多种多样的，例如字符串、数字或者某种自定义类型，因此要构成<code>map</code>，<strong>关键字类型必须定义元素比较的方法</strong>。<br><strong>通常情况下，对<code>map</code>中单个元素的访问速度会低于<code>unordered_map</code>，但<code>map</code>允许使用迭代器对其有序子集进行访问，也可以采用<code>[]+key</code>的形式访问元素。</strong></p>
+<h3 id="3-1-multimap的构造"><a href="#3-1-multimap的构造" class="headerlink" title="3.1.multimap的构造"></a>3.1.<code>multimap</code>的构造</h3><div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> multimap&lt;<span class="type">int</span>, string, less&lt;<span class="type">int</span>&gt;&gt; ML;</span><br><span class="line"><span class="keyword">typedef</span> multimap&lt;<span class="type">int</span>, string, greater&lt;<span class="type">int</span>&gt;&gt; MG;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> s1[] = &#123;<span class="number">23</span>, <span class="number">20</span>, <span class="number">10</span>, <span class="number">28</span>&#125;;</span><br><span class="line">string s2[] = &#123;<span class="string">&quot;重庆&quot;</span>, <span class="string">&quot;上海&quot;</span>, <span class="string">&quot;北京&quot;</span>, <span class="string">&quot;成都&quot;</span>&#125;；</span><br><span class="line"><span class="type">int</span> size = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">ML m1;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;size;i++)&#123;</span><br><span class="line">  m1.<span class="built_in">insert</span>(<span class="built_in">make_pair</span>(s1[i],s2[i]);</span><br><span class="line"><span class="comment">// (10 北京) (20 上海) (23 重庆) (28 成都)</span></span><br><span class="line">ML <span class="built_in">m2</span>(m1);</span><br><span class="line"><span class="comment">// (10 北京) (20 上海) (23 重庆) (28 成都)</span></span><br><span class="line">ML <span class="built_in">m3</span>(m2.<span class="built_in">begin</span>(),m2.<span class="built_in">end</span>());</span><br><span class="line"><span class="comment">// (10 北京) (20 上海) (23 重庆) (28 成都)</span></span><br><span class="line">MG m4;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;size;i++)&#123;</span><br><span class="line">  m4.<span class="built_in">insert</span>(<span class="built_in">make_pair</span>(s1[i],s2[i]);</span><br><span class="line"><span class="comment">// (28 成都) (23 重庆) (20 上海) (10 北京)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="3-2-map与multimap的成员函数"><a href="#3-2-map与multimap的成员函数" class="headerlink" title="3.2. map与multimap的成员函数"></a>3.2. <code>map</code>与<code>multimap</code>的成员函数</h3><p>映射与集合非常类似，因此其也具有<code>insert</code>，<code>lower_bound</code>，<code>upper_bound</code>，<code>equal_range</code>等成员函数。不同之处在于：在向<code>map</code>容器中添加元素时，需要先构成<code>&lt;key-value&gt;</code>键值对，再用<code>insert</code>插入；也可以通过<code>map</code>的<code>emplace</code>成员函数直接插入而无需构成键值对。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> multimap&lt;<span class="type">int</span>, string&gt; Map_L;</span><br><span class="line"><span class="type">int</span> a[] = &#123;<span class="number">80</span>, <span class="number">60</span>, <span class="number">70</span>&#125;;</span><br><span class="line">string s[] = &#123;<span class="string">&quot;赵&quot;</span>, <span class="string">&quot;钱&quot;</span>, <span class="string">&quot;孙&quot;</span>, <span class="string">&quot;李&quot;</span>, <span class="string">&quot;赵&quot;</span>, <span class="string">&quot;孙&quot;</span>&#125;;</span><br><span class="line"><span class="type">int</span> size = <span class="number">6</span>;</span><br><span class="line">Map_L mapL;</span><br><span class="line">mapL.<span class="built_in">emplace</span>(a[<span class="number">0</span>],s[<span class="number">0</span>]);</span><br><span class="line">mapL.<span class="built_in">emplace</span>(a[<span class="number">1</span>],s[<span class="number">1</span>]);</span><br><span class="line">mapL.<span class="built_in">emplace</span>(a[<span class="number">2</span>],s[<span class="number">2</span>]);</span><br><span class="line">mapL.<span class="built_in">emplace</span>(a[<span class="number">1</span>],s[<span class="number">3</span>]);</span><br><span class="line">mapL.<span class="built_in">emplace</span>(a[<span class="number">2</span>],s[<span class="number">4</span>]);</span><br><span class="line">mapL.<span class="built_in">emplace</span>(a[<span class="number">1</span>],s[<span class="number">5</span>]);</span><br><span class="line"><span class="comment">// (60,钱) (60,李) (60,孙) (70,孙) (70,赵) (80,赵)</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="4-unordered-set容器与unordered-multiset容器"><a href="#4-unordered-set容器与unordered-multiset容器" class="headerlink" title="4. unordered_set容器与unordered_multiset容器"></a>4. <code>unordered_set</code>容器与<code>unordered_multiset</code>容器</h2><p><code>unordered</code>表示无序，在无序关联容器中，元素并不是按照其值的比较关系来进行组织和存储的，而是使用一个哈希函数和关键字类型的<code>==</code>运算符来管理容器。<br>在无序关联容器中，元素之间并没有任何的序关系，当向容器中插入元素时，通过计算关键字的哈希值将其映射到不同的桶(bucket)中，每一个桶可以保存一个或多个元素。如果容器允许重复关键字，那么具有相同关键字的元素也会被映射到同一个桶中。</p>
+<p>无序容器提供了大量管理桶的函数，如下：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 返回编号为n的桶中元素的个数</span></span><br><span class="line"><span class="built_in">bucket_size</span>(n)</span><br><span class="line"><span class="comment">// 返回容器中桶的数量</span></span><br><span class="line"><span class="built_in">bucket_count</span>()</span><br><span class="line"><span class="comment">// 返回关键字key对应的桶编号</span></span><br><span class="line"><span class="built_in">bucket</span>(key)</span><br><span class="line"><span class="comment">// 返回平均装填因子 = 元素数量/桶数量</span></span><br><span class="line"><span class="built_in">load_factor</span>()</span><br><span class="line"><span class="comment">// 返回最大装填因子</span></span><br><span class="line"><span class="comment">// 为保证load_factor &lt;= max_load_factor，容器会在必要的时候增加桶数量</span></span><br><span class="line"><span class="built_in">max_load_factor</span>()</span><br><span class="line"><span class="comment">// 重建hash表，使得bucket_count &gt;= n</span></span><br><span class="line"><span class="built_in">rehash</span>(n)</span><br><span class="line"><span class="comment">// 返回哈希函数对象</span></span><br><span class="line"><span class="built_in">hash_function</span>()</span><br></pre></td></tr></table></figure></div>
+
+<p>此外，无序容器也提供了许多与有序容器相同的操作，因此可以很方便的将有序容器替换为无序容器。<br>需要注意的是，<strong>无序容器只支持前向迭代器，因此无法实现迭代器的自减运算；有序容器支持双向迭代器，支持迭代器的自增和自减运算</strong>。</p>
+<h2 id="4-unordered-map容器和unordered-multimap容器"><a href="#4-unordered-map容器和unordered-multimap容器" class="headerlink" title="4. unordered_map容器和unordered_multimap容器"></a>4. <code>unordered_map</code>容器和<code>unordered_multimap</code>容器</h2><p><code>unordered_map</code>除了元素存储组织方式上的差别外，与<code>map</code>的操作基本一致，在此不展开介绍。</p>
+<h2 id="5-补充"><a href="#5-补充" class="headerlink" title="5. 补充"></a>5. 补充</h2><p>在关联容器中，<code>set</code>的关键字是<code>const</code>的，<code>map</code>中的键值对<code>&lt;key-value&gt;</code>中的<code>key</code>也是<code>const</code>的，因此无法直接修改关键字，只能删除后再添加。</p>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>Post title：C++STL之关联容器</li>
+        <li>Post author：Shiszhi</li>
+        <li>Create time：2022-12-15 08:43:43</li>
+        <li>
+            Post link：https://shis-zhi.github.io/2022/12/15/C++STL之关联容器/
+        </li>
+        <li>
+            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/C-STL/">#C++STL</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+            <div class="article-nav">
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/12/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F-Singleton/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">设计模式之单例模式(Singleton)</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2020</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Shiszhi</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v0.3.4</a>
+        </div>
+        
+        
+    </div>
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fa-duotone fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div style="font-size: 1.3rem;margin-top: 0; margin-bottom: 0.8rem; transition-duration: 0.1s;"><i class="fa-solid fa-list-tree"></i> <strong>Contents</strong></div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8%E6%A6%82%E8%BF%B0"><span class="nav-text">1. 关联容器概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%9B%86%E5%90%88set%E4%B8%8E%E5%A4%9A%E9%87%8D%E9%9B%86%E5%90%88multiset"><span class="nav-text">2. 集合set与多重集合multiset</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-set%E4%B8%8Emultiset%E7%9A%84%E6%9E%84%E9%80%A0"><span class="nav-text">2.1.set与multiset的构造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-set%E4%B8%8Emultiset%E7%9A%84%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0"><span class="nav-text">2.2. set与multiset的成员函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%98%A0%E5%B0%84map%E4%B8%8E%E5%A4%9A%E9%87%8D%E6%98%A0%E5%B0%84multimap"><span class="nav-text">3.映射map与多重映射multimap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-multimap%E7%9A%84%E6%9E%84%E9%80%A0"><span class="nav-text">3.1.multimap的构造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-map%E4%B8%8Emultimap%E7%9A%84%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0"><span class="nav-text">3.2. map与multimap的成员函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-unordered-set%E5%AE%B9%E5%99%A8%E4%B8%8Eunordered-multiset%E5%AE%B9%E5%99%A8"><span class="nav-text">4. unordered_set容器与unordered_multiset容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-unordered-map%E5%AE%B9%E5%99%A8%E5%92%8Cunordered-multimap%E5%AE%B9%E5%99%A8"><span class="nav-text">4. unordered_map容器和unordered_multimap容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E8%A1%A5%E5%85%85"><span class="nav-text">5. 补充</span></a></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            REDEFINE.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            REDEFINE.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            REDEFINE.refresh();
+        });
+    });
+</script>
+
+
+
+</body>
+</html>
