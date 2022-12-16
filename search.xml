@@ -515,7 +515,8 @@
 <h2 id="5-补充"><a href="#5-补充" class="headerlink" title="5. 补充"></a>5. 补充</h2><p>在关联容器中，<code>set</code>的关键字是<code>const</code>的，<code>map</code>中的键值对<code>&lt;key-value&gt;</code>中的<code>key</code>也是<code>const</code>的，因此无法直接修改关键字，只能删除后再添加。</p>
 ]]></content>
       <tags>
-        <tag>C++STL</tag>
+        <tag>C++</tag>
+        <tag>STL</tag>
       </tags>
   </entry>
   <entry>
