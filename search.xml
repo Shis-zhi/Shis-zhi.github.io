@@ -529,4 +529,289 @@
         <tag>设计模式</tag>
       </tags>
   </entry>
+  <entry>
+    <title>GN工具介绍</title>
+    <url>/2022/12/17/GN%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/</url>
+    <content><![CDATA[<h2 id="1-GN语言"><a href="#1-GN语言" class="headerlink" title="1. GN语言"></a>1. GN语言</h2><p>GN使用动态类型语言，具有以下类型：</p>
+<ul>
+<li>Boolean（true, false）</li>
+<li>64-bit signed integers</li>
+<li>Strings</li>
+<li>Lists</li>
+<li>Scopes（类似于dictionary）</li>
+</ul>
+<p>注意：<strong>GN中没有循环和用户定义的函数调用</strong></p>
+<h3 id="1-1-Strings"><a href="#1-1-Strings" class="headerlink" title="1.1. Strings"></a>1.1. <code>Strings</code></h3><p>String用双引号括起来，并且使用反斜杠作为转义字符。<br>仅支持以下转义序列：</p>
+<ul>
+<li><code>\&quot;</code> 表示符号<code>&quot;</code></li>
+<li><code>\$</code> 表示符号&#96;$&#96;&#96;</li>
+<li><code>\\</code> 表示符号<code>\</code><br>除以上用法外，反斜杠的任何用法都被视为符号<code>\</code></li>
+</ul>
+<p><code>$</code> 支持简单变量替换，将其后紧跟的单词替换为变量的值，如下例：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">a = &quot;mypath&quot;</span><br><span class="line">b = &quot;$a/foo.cc&quot; # b -&gt; &quot;mypath/foo.cc&quot;</span><br><span class="line">c = &quot;foo$&#123;a&#125;bar.cc&quot;# c -&gt; &quot;foomypathbar.cc&quot;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="1-2-Lists"><a href="#1-2-Lists" class="headerlink" title="1.2. Lists"></a>1.2. <code>Lists</code></h3><p>列表的长度无法获取。</p>
+<p>列表支持追加元素：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">a = [ &quot;first&quot; ]</span><br><span class="line">a += [ &quot;second&quot; ]  # [ &quot;first&quot;, &quot;second&quot; ]</span><br><span class="line">a += [ &quot;third&quot;, &quot;fourth&quot; ]  # [ &quot;first&quot;, &quot;second&quot;, &quot;third&quot;, &quot;fourth&quot; ] </span><br><span class="line">b = a + [ &quot;fifth&quot; ]  # [ &quot;first&quot;, &quot;second&quot;, &quot;third&quot;, &quot;fourth&quot;, &quot;fifth&quot; ]</span><br></pre></td></tr></table></figure></div>
+
+<p>列表也支持删除元素：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">a = [ &quot;first&quot;, &quot;second&quot;, &quot;third&quot;, &quot;first&quot; ]</span><br><span class="line">b = a - [ &quot;first&quot; ]  # [ &quot;second&quot;, &quot;third&quot; ]</span><br><span class="line">a -= [ &quot;second&quot; ]  # [ &quot;first&quot;, &quot;third&quot;, &quot;fourth&quot; ]</span><br></pre></td></tr></table></figure></div>
+
+<p>列表的<code>-</code>运算符搜索匹配项并且删除所有的匹配项，如果未找到匹配项，则会抛出错误。<br>列表支持索引（下标从0开始）：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">a = [ &quot;first&quot;, &quot;second&quot;, &quot;third&quot; ]</span><br><span class="line">b = a[1]  # -&gt; &quot;second&quot;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="1-3-Functions"><a href="#1-3-Functions" class="headerlink" title="1.3. Functions"></a>1.3. Functions</h3><p>简单函数与大多数其他语言类似：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">print(&quot;hello,world&quot;)</span><br><span class="line">assert(is_win, &quot;This should only be executed on Windows&quot;)</span><br></pre></td></tr></table></figure></div>
+
+<p>部分函数采用一个由{} 包围的代码块：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">static_library(&quot;mylibrary&quot;)&#123;</span><br><span class="line">    sources = [&quot;a.cc&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>用户无法自行定义函数，但是可以通过定义模板达到类似的效果，见后文</p>
+<h3 id="1-4-Scoping-and-execution"><a href="#1-4-Scoping-and-execution" class="headerlink" title="1.4. Scoping and execution"></a>1.4. Scoping and execution</h3><p>文件和<code>&#123;&#125;</code>块引入了新的作用域。<br>作用域是嵌套的，读取变量时会按照相反顺序搜索包含范围，直到找到匹配的名称。写入变量时，总是进入最里面的作用域。<br>除了最里面的作用域外，没有任何方法可以修改任何封闭范围，这意味着，当定义目标时，在块内执行的任何操作都不会泄漏到文件的其余部分。<br>对于<code>if/else</code>语句，即使使用了<code>&#123;&#125;</code>，也不会引入一个新的作用域，因此更改将在语句之外永久存在。</p>
+<h2 id="2-命名"><a href="#2-命名" class="headerlink" title="2. 命名"></a>2. 命名</h2><h3 id="2-1-文件以及目录名"><a href="#2-1-文件以及目录名" class="headerlink" title="2.1. 文件以及目录名"></a>2.1. 文件以及目录名</h3><p>三种可能的形式：<br>相对路径：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;foo.cc&quot;</span><br><span class="line">&quot;src/foo.cc&quot;</span><br><span class="line">&quot;../src/foo.cc&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>SourceTree绝对路径：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;//net/foo.cc&quot;</span><br><span class="line">&quot;//base/test/foo.cc&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>系统绝对路径：（比较少见，多用于头文件目录）</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;/usr/local/include/&quot;</span><br><span class="line">&quot;C:/Program Files/Windows Kits/Include&quot;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="2-2-标签"><a href="#2-2-标签" class="headerlink" title="2.2 标签"></a>2.2 标签</h3><p>可以参与依赖关系图的所有内容都由一个定义格式的字符串所标识，常见的标签如下所示：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;//base/test:test_support&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>它由一个SourceTree绝对路径，一个冒号和一个名称组成，这意味着在<code>src/base/test/BUILD.gn</code>中查找名为<code>test_support</code>的内容。</p>
+<p>规范标签通常还包括正在使用的工具链的标签。通常情况下，工具链标签是隐式继承的，但可以将其包含在指定的跨工具链的依赖中，如下：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;//base/test:test_support(//build/toolchain/win:msvc)&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>在这种情况下，系统会在文件<code>//build/toolchain/win</code>中查找名为<code>msvc</code>的工具链定义从而了解如何编译此目标.<br>如果要引用同一构建文件中的内容，可以省略路径名，只需以冒号开头：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;:base&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>标签可以指定为相对于当前目录</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;source/plugin:myplugin&quot;</span><br><span class="line">&quot;../net:url_request&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>如果未指定名称，它将继承目录名：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;//net&quot; = &quot;//net:net&quot;</span><br><span class="line">&quot;//tools/gn&quot; = &quot;//tools/gn:gn&quot;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="3-构建配置"><a href="#3-构建配置" class="headerlink" title="3. 构建配置"></a>3. 构建配置</h2><h3 id="3-1-总体构建流程"><a href="#3-1-总体构建流程" class="headerlink" title="3.1.总体构建流程"></a>3.1.总体构建流程</h3><ol>
+<li>在当前路径下寻找.gn 文件，并在目录树上遍历，直到找到一个.gn 文件，设置此目录为“源根目录”，并且解释该文件从而查找生成配置文件的名称</li>
+<li>执行构建配置文件（默认的工具链）</li>
+<li>加载根目录中的BUILD.gn</li>
+<li>递归加载其他目录中的BUILD.gn 从而解决所有当前依赖关系。如果在指定位置未找到BUILD文件，GN将在tools&#x2F;gn&#x2F;secondary 内的相应位置查找</li>
+<li>解决了目标的依赖关系后，将.ninja文件写入磁盘</li>
+<li>解决所有目标后，写入build.ninja</li>
+</ol>
+<h3 id="3-2-构建配置文件"><a href="#3-2-构建配置文件" class="headerlink" title="3.2. 构建配置文件"></a>3.2. 构建配置文件</h3><p>执行的首个文件是构建配置文件，此文件名在标记为存储库根的<code>.gn</code>文件中被指定。<br><strong>只有一个构建配置文件。</strong><br>此文件设置所有其他构建文件将在其中执行的范围。在此文件中设置的任何参数、变量、默认值等都将对构建过程中的所有文件可见。</p>
+<h3 id="3-3-构建参数"><a href="#3-3-构建参数" class="headerlink" title="3.3. 构建参数"></a>3.3. 构建参数</h3><p>参数可以从命令行（以及其他工具链）传入，可以声明接受哪些参数并指定默认值<br>在给定范围内多次声明给定参数是错误的。<br>通常，参数在导入的文件中声明（在生成的某些子集中间共享）或在主生成配置文件中声明（使其全局）。</p>
+<h3 id="3-4-目标默认值"><a href="#3-4-目标默认值" class="headerlink" title="3.4. 目标默认值"></a>3.4. 目标默认值</h3><p>可以为给定的目标类型设置一些默认值，通常在构建配置文件中完成，用以设置一个默认配置的列表，此列表定义每个目标类型的构建标志和其他设置信息。<br>例如，声明一个静态库时，将会应用静态库的目标默认值。目标可以覆盖、修改或保留这些值</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line"># This call is typically in the build config file (see above).</span><br><span class="line">set_defaults(&quot;static_library&quot;) &#123;</span><br><span class="line">  configs = [ &quot;//build:rtti_setup&quot;, &quot;//build:extra_warnings&quot; ]</span><br><span class="line">&#125;</span><br><span class="line"># This would be in your directory&#x27;s BUILD.gn file.</span><br><span class="line">static_library(&quot;mylib&quot;) &#123;</span><br><span class="line">  # At this point configs is set to [ &quot;//build:rtti_setup&quot;, &quot;//build:extra_warnings&quot; ]</span><br><span class="line">  # by default but may be modified.</span><br><span class="line">  configs -= &quot;//build:extra_warnings&quot;  # Don&#x27;t want these warnings.</span><br><span class="line">  configs += &quot;:mylib_config&quot;  # Add some more configs.</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>设置目标默认值的另一个用例是通过模板定义自己的目标类型并且希望指定某些默认值。</p>
+<h2 id="4-目标"><a href="#4-目标" class="headerlink" title="4. 目标"></a>4. 目标</h2><p>目标就是构建图中的节点，通常表示即将生成的某种可执行文件或库文件。<br>目标依赖于其他目标，内置目标类型包括：</p>
+<ul>
+<li>action: 运行脚本以生成文件</li>
+<li>action_foreach: 为每一个源文件运行一次脚本</li>
+<li>component: 可以配置为另一种类型的库</li>
+<li>executable: 生成可执行文件</li>
+<li>group: 引用一个或多个其他目标的虚拟依存关系节点</li>
+<li>shared_library: 一个.dll或.so</li>
+<li>source_set: 一个轻量级虚拟静态库（通常优于真实静态库，因为它可以更快地构建）</li>
+<li>static_library: 一个.lib或者.a文件 (通常你需要一个source_set)</li>
+<li>test: 生成可执行文件，但将其注释为测试</li>
+</ul>
+<p>可以扩展此功能，使用模板创建自定义目标类型。</p>
+<h3 id="4-1-配置"><a href="#4-1-配置" class="headerlink" title="4.1. 配置"></a>4.1. 配置</h3><p>配置是指定标志集（包括目录和定义）的命名对象。他们可以应用于目标并推送到相关目标。<br>定义一个配置：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">config(&quot;myconfig&quot;)&#123;</span><br><span class="line">    includes = [ &quot;src/include&quot; ]</span><br><span class="line">    defines = [ &quot;ENABLE_DOOM_MELON&quot; ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>将配置应用于目标：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">executable(&quot;doom_melon&quot;)&#123;</span><br><span class="line">    configs = [ &quot;:myconfig&quot; ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>构建配置文件通常指定设置默认配置列表的目标默认值。目标可以根据需要添加或删除到此列表。因此，在实践中，您通常会使用<code>configs += &quot;：myconfig&quot;</code>附加到默认值列表中。</p>
+<h3 id="4-2-公共配置"><a href="#4-2-公共配置" class="headerlink" title="4.2. 公共配置"></a>4.2. 公共配置</h3><p>一个目标可以将设置应用于依赖他的其他目标。<br>最常见的例子是第三方目标，需要一些定义或包含目录才能正确编译其标头。<br>你希望这些设置既适用于第三方库本身的编译，也适用于使用该库的所有目标。<br>为了实现以上目标，可以使用要应用的设置编写配置</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">config(&quot;my_external_library_config&quot;) &#123;</span><br><span class="line">  includes = &quot;.&quot;</span><br><span class="line">  defines = [ &quot;DISABLE_JANK&quot; ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>然后将此配置作为公共配置添加到目标。它既适用于目标，也适用于直接依赖它的目标。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">shared_library(&quot;my_external_library&quot;) &#123;</span><br><span class="line">  ...</span><br><span class="line">  # Targets that depend on this get this config applied.</span><br><span class="line">  public_configs = [ &quot;:my_external_library_config&quot; ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>通过将你的目标添加为公共依赖项，依赖目标可以反过来将其转发到依赖树的另一个级别。<br>通过将目标设置为<code>all_dependent_config</code>，可以将配置转发给所有依赖项直到链接边界。</p>
+<h2 id="5-工具链"><a href="#5-工具链" class="headerlink" title="5.工具链"></a>5.工具链</h2><p>工具链是一组构建命令，用于运行不同类型的输入文件和链接任务。<br>构建中可以有多个工具链。最简单的是将每一个都视为完全独立的构建，它们之间可以有额外的依赖关系。例如，这意味着32位Windows构建可能依赖于64位助手目标。<br>当一个目标指定对另一个目标的依赖关系时，将继承当前工具链，除非它被显式重写。</p>
+<h3 id="5-1-工具链和构建配置"><a href="#5-1-工具链和构建配置" class="headerlink" title="5.1.工具链和构建配置"></a>5.1.工具链和构建配置</h3><p>当您有一个只有一个工具链的简单构建时，构建配置文件仅在构建开始时加载一次。它必须调用<code>set_default_toolchain</code>来告诉GN要使用的工具链定义的标签。此工具链定义包含用于编译器和链接器的命令。工具链定义的<code>toolchain_args</code>部分会被忽略。<br>当目标依赖于使用不同工具链的目标时，GN将使用该辅助工具链启动构建以解析目标。GN将使用工具链定义中指定的参数加载构建配置文件。由于工具链已知，因此忽略对<code>set_default_toolchain</code>工具链的调用。<br>因此，工具链配置是双向的。在默认工具链（即主构建目标）中，配置从构建配置文件流向工具链：构建配置文件查看构建状态（操作系统类型、CPU架构等），并决定使用哪个工具链（通过<code>set_default_toolchain</code>工具链）。在辅助工具链中，配置从工具链流向构建配置文件：工具链定义中的<code>toolchain_args</code>指定重新调用构建的参数。</p>
+<h3 id="5-2-工具链示例"><a href="#5-2-工具链示例" class="headerlink" title="5.2. 工具链示例"></a>5.2. 工具链示例</h3><p>假设默认版本是64位版本。这是基于当前系统的默认CPU架构，或者用户在命令行上传递了<code>target_CPU=&quot;x64&quot;</code>。构建配置文件可能如下所示，以设置默认工具链：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Set default toolchain only has an effect when run in the context of</span><br><span class="line"># the default toolchain. Pick the right one according to the current CPU</span><br><span class="line"># architecture.</span><br><span class="line">if (target_cpu == &quot;x64&quot;) &#123;</span><br><span class="line">  set_default_toolchain(&quot;//toolchains:64&quot;)</span><br><span class="line">&#125; else if (target_cpu == &quot;x86&quot;) &#123;</span><br><span class="line">  set_default_toolchain(&quot;//toolchains:32&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>如果64位目标想要依赖于32位二进制文件，它将使用<code>datadeps</code>指定依赖关系（<code>datadeps</code>类似于仅在运行时需要且不链接的<code>deps</code>，因为您无法链接32位和64位库）。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">executable(&quot;my_program&quot;) &#123;</span><br><span class="line">  ...</span><br><span class="line">  if (target_cpu == &quot;x64&quot;) &#123;</span><br><span class="line">    # The 64-bit build needs this 32-bit helper.</span><br><span class="line">    datadeps = [ &quot;:helper(//toolchains:32)&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">if (target_cpu == &quot;x86&quot;) &#123;</span><br><span class="line">  # Our helper library is only compiled in 32-bits.</span><br><span class="line">  shared_library(&quot;helper&quot;) &#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>上面引用的工具链文件（<code>toolchains/BUILD.gn</code>）将定义两个工具链：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">toolchain(&quot;32&quot;) &#123;</span><br><span class="line">  tool(&quot;cc&quot;) &#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">  ... more tools ...</span><br><span class="line">  # Arguments to the build when re-invoking as a secondary toolchain.</span><br><span class="line">  toolchain_args() &#123;</span><br><span class="line">    toolchain_cpu = &quot;x86&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">toolchain(&quot;64&quot;) &#123;</span><br><span class="line">  tool(&quot;cc&quot;) &#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">  ... more tools ...</span><br><span class="line">  # Arguments to the build when re-invoking as a secondary toolchain.</span><br><span class="line">  toolchain_args() &#123;</span><br><span class="line">    toolchain_cpu = &quot;x64&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>工具链参数明确指定了CPU架构，因此，如果目标依赖于使用该工具链的某些东西，则在重新调用构建时将设置该CPU架构。默认工具链忽略这些参数，因为在知道它们时，构建配置已经运行。通常，工具链参数和用于设置默认工具链的条件应该一致。<br>多构建设置的好处是，可以在目标中编写引用当前工具链状态的条件。构建文件将在每个工具链的不同状态下重新运行。对于上面的<code>my_program</code>示例，您可以看到它查询CPU架构，只为程序的64位构建添加了依赖项。32位构建不会获得这种依赖关系。</p>
+<h3 id="5-3-声明工具链"><a href="#5-3-声明工具链" class="headerlink" title="5.3. 声明工具链"></a>5.3. 声明工具链</h3><p>工具链使用toolchain命令声明，该命令设置用于每个编译和链接操作的命令。该工具链还指定了一组参数，以在执行时传递给构建配置文件。这允许你将配置信息传递给备用工具链。</p>
+<h2 id="6-模板"><a href="#6-模板" class="headerlink" title="6. 模板"></a>6. 模板</h2><p>模板是GN重用代码的主要方式。通常，模板会扩展到一个或多个其他目标类型。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Declares static library consisting of rules to build all of the IDL files into</span><br><span class="line"># compiled code.</span><br><span class="line">template(&quot;idl&quot;) &#123;</span><br><span class="line">  source_set(target_name) &#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>通常，您的模板定义将放在<code>.gni</code>文件中，用户将导入该文件以查看模板定义：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">import(&quot;//tools/idl_compiler.gni&quot;)</span><br><span class="line">idl(&quot;my_interfaces&quot;) &#123;</span><br><span class="line">  sources = [ &quot;a.idl&quot;, &quot;b.idl&quot; ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>声明模板会在当时范围内的变量周围创建一个闭包。当调用模板时，魔术变量<code>invoker</code>用于从调用范围中读取变量。模板通常会将其感兴趣的值复制到自己的范围中：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">template(&quot;idl&quot;) &#123;</span><br><span class="line">  source_set(target_name) &#123;</span><br><span class="line">    sources = invoker.sources</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>模板执行时的当前目录将是调用生成文件的目录，而不是模板源文件的目录。因此，从模板调用器传递的文件是正确的（这通常是模板中大多数文件处理的原因）。<br>但是，如果模板本身有文件（可能它生成了一个运行脚本的操作），您将希望使用绝对路径（<code>//foo/…</code>）来引用这些文件，以说明当前目录在调用过程中是不可预测的。</p>
+<h2 id="7-其他功能"><a href="#7-其他功能" class="headerlink" title="7. 其他功能"></a>7. 其他功能</h2><h3 id="7-1-导入"><a href="#7-1-导入" class="headerlink" title="7.1. 导入"></a>7.1. 导入</h3><p>您可以使用<code>import</code>功能将<code>.gni</code>文件导入当前范围。这不是一个包含。导入的文件独立执行，生成的作用域复制到当前文件中。这允许缓存导入的结果，也防止了对包含的一些更“创造性”的使用。</p>
+<h3 id="7-2-路径处理"><a href="#7-2-路径处理" class="headerlink" title="7.2. 路径处理"></a>7.2. 路径处理</h3><p>通常，您需要创建一个文件名或一个相对于不同目录的文件名列表。这在运行脚本时尤其常见，脚本以生成输出目录作为当前目录执行，而生成文件通常指与其包含目录相关的文件。<br>您可以使用<code>rebase_path</code>转换目录。<br>将相对于当前目录的文件名转换为相对于根生成目录的文件名的典型用法是：<code>new_paths=rebase_path(&quot;myfile.c&quot;，root_build_dir)</code></p>
+<h3 id="7-3-模式"><a href="#7-3-模式" class="headerlink" title="7.3. 模式"></a>7.3. 模式</h3><p>模式用于为自定义目标类型的给定输入集生成输出文件名，并自动从<code>sources</code>变量中删除文件。</p>
+<h3 id="7-4-执行脚本"><a href="#7-4-执行脚本" class="headerlink" title="7.4. 执行脚本"></a>7.4. 执行脚本</h3><p>执行脚本有两种方法。GN中的所有外部脚本都是<code>Python</code>。<br>第一种方法是作为构建步骤。作为构建的一部分，这样的脚本将接受一些输入并生成一些输出。调用脚本的目标使用<code>&quot;action&quot;</code>目标类型声明。<br>第二种执行脚本的方法是在生成文件执行期间同步执行。在某些情况下，这对于确定要编译的文件集或获取生成文件可能依赖的某些系统配置是必要的。生成文件可以读取脚本的标准输出并以不同的方式对其进行操作。<br>同步脚本执行由<code>exec_script</code>函数完成。因为同步执行脚本需要暂停当前构建文件的执行，直到<code>Python</code>进程完成执行，所以依赖外部脚本的速度很慢，应该最小化。<br>您可以同步读取和写入文件，这在同步运行脚本时偶尔是必要的。典型的用例是传递比当前平台的命令行限制长的文件名列表。如果可能的话，应该避免这些功能。</p>
+]]></content>
+      <tags>
+        <tag>GN</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>WebRTC基础之GN</title>
+    <url>/2022/12/17/WebRTC%E5%9F%BA%E7%A1%80%E4%B9%8BGN/</url>
+    <content><![CDATA[<h2 id="1-GN相关介绍"><a href="#1-GN相关介绍" class="headerlink" title="1. GN相关介绍"></a>1. GN相关介绍</h2><p><code>GN</code>是谷歌用来生成<code>Ninja</code>配置文件的工具。<br><code>GN</code>的配置文件使用<code>Python</code>语法，WebRTC源码根目录的<code>BUILD.gn</code>文件是整个项目的配置文件，在其中引用了诸如<code>webrtc.gni</code>等配置文件，这些配置文件中定义了很多目标模板、变量等。<br><code>BUILD.gn</code>里还定义了一些构建目标，比如：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">rtc_static_library(&quot;webrtc&quot;) &#123;</span><br><span class="line">  # Only the root target and the test should depend on this.</span><br><span class="line">  visibility = [</span><br><span class="line">    &quot;//:default&quot;,</span><br><span class="line">    &quot;//:webrtc_lib_link_test&quot;,</span><br><span class="line">  ]</span><br><span class="line"></span><br><span class="line">  sources = []</span><br><span class="line">  complete_static_lib = true</span><br><span class="line">  suppressed_configs += [ &quot;//build/config/compiler:thin_archive&quot; ]</span><br><span class="line">  defines = []</span><br><span class="line"></span><br><span class="line">  deps = [</span><br><span class="line">    &quot;:webrtc_common&quot;,</span><br><span class="line">    &quot;api:create_peerconnection_factory&quot;,</span><br><span class="line">    &quot;api:libjingle_peerconnection_api&quot;,</span><br><span class="line">    &quot;api:rtc_error&quot;,</span><br><span class="line">    &quot;api:transport_api&quot;,</span><br><span class="line">    &quot;api/crypto&quot;,</span><br><span class="line">    &quot;api/rtc_event_log:rtc_event_log_factory&quot;,</span><br><span class="line">    &quot;api/task_queue&quot;,</span><br><span class="line">    &quot;api/task_queue:default_task_queue_factory&quot;,</span><br><span class="line">    &quot;audio&quot;,</span><br><span class="line">    &quot;call&quot;,</span><br><span class="line">    &quot;common_audio&quot;,</span><br><span class="line">    &quot;common_video&quot;,</span><br><span class="line">    &quot;logging:rtc_event_log_api&quot;,</span><br><span class="line">    &quot;media&quot;,</span><br><span class="line">    &quot;modules&quot;,</span><br><span class="line">    &quot;modules/video_capture:video_capture_internal_impl&quot;,</span><br><span class="line">    &quot;p2p:rtc_p2p&quot;,</span><br><span class="line">    &quot;pc:libjingle_peerconnection&quot;,</span><br><span class="line">    &quot;pc:peerconnection&quot;,</span><br><span class="line">    &quot;pc:rtc_pc&quot;,</span><br><span class="line">    &quot;pc:rtc_pc_base&quot;,</span><br><span class="line">    &quot;rtc_base&quot;,</span><br><span class="line">    &quot;sdk&quot;,</span><br><span class="line">    &quot;video&quot;,</span><br><span class="line">  ]</span><br><span class="line">  # ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>下面简单解释一下各个部分的含义：</p>
+<ul>
+<li><code>rtc_static_library</code>：通常会基于一些模板定义构建目标，常用的有静态库(<code>rtc_static_library</code>)、动态库(<code>rtc_shared_library</code>)和可执行程序(<code>rtc_executable</code>)</li>
+<li><code>visibility</code>：用来指明这个目标可以被哪些其他目标依赖</li>
+<li><code>sources</code>：用来指明这个目标的源码文件，这里没有指定任何源码，因为所有源码都包含在其他的依赖目标中。</li>
+<li><code>deps</code>：用来指明依赖目标。在这部分以<code>:</code>开头的就是在同一个<code>BUILD.gn</code>中定义的目标；否则就是其他目录的<code>BUILD.gn</code>定义的目标。指定目录时可能会以<code>//</code>开头，比如<code>api</code>和<code>api/rtc_event_log</code>都是去子目录查找；指定目录如果不包含<code>:</code>，就是指和目录同名的目标，比如<code>audio</code>等价于<code>audio:audio</code>。</li>
+<li><code>complete_static_lib = true</code>和<code>suppressed_configs += [ &quot;//build/config/compiler:thin_archive&quot; ]</code>：是定义静态库时必须的，否则编译出来的静态库不完整（不会包含所有的目标文件）。</li>
+<li><code>defines</code>：用来定义宏。</li>
+</ul>
+<p>除了以上参数之外，还有几个参数比较常用：</p>
+<ul>
+<li><code>include_dirs</code>：用来指明C++头文件查找路径</li>
+<li><code>libs</code>：用来指明依赖的预编译库</li>
+<li><code>cflags</code>：用来指明编译选项</li>
+<li><code>ldflags</code>：用来指明链接选项</li>
+</ul>
+<p>上面的参数如果是列表，就都可以使用<code>=</code>进行覆盖赋值或使用<code>+=</code>进行增量赋值。</p>
+<h2 id="2-系统宏定义"><a href="#2-系统宏定义" class="headerlink" title="2. 系统宏定义"></a>2. 系统宏定义</h2><p>在<code>WebRTC</code>的源码中，有很多类似于<code>if defined(WEBRTC_IOS)</code>之类的宏定义检查，这是在同一个函数或者文件中。只有细微的平台差异需要使用不同的代码，因此根据不同的系统宏定义来控制只编译对应平台的代码。<br>上述宏的定义是通过<code>gn</code>配置文件来控制的，具体逻辑在源码根目录下<code>BUILD.gn</code>文件中的<code>config(&quot;common_inherited_config&quot;)代码块中</code>：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">config(&quot;common_inherited_config&quot;) &#123;</span><br><span class="line">  # ...</span><br><span class="line">  if (is_posix || is_fuchsia) &#123;</span><br><span class="line">    defines += [ &quot;WEBRTC_POSIX&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line">  if (is_ios) &#123;</span><br><span class="line">    defines += [</span><br><span class="line">      &quot;WEBRTC_MAC&quot;,</span><br><span class="line">      &quot;WEBRTC_IOS&quot;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">  if (is_linux) &#123;</span><br><span class="line">    defines += [ &quot;WEBRTC_LINUX&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line">  if (is_mac) &#123;</span><br><span class="line">    defines += [ &quot;WEBRTC_MAC&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line">  if (is_fuchsia) &#123;</span><br><span class="line">    defines += [ &quot;WEBRTC_FUCHSIA&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line">  if (is_win) &#123;</span><br><span class="line">    defines += [ &quot;WEBRTC_WIN&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line">  if (is_android) &#123;</span><br><span class="line">    defines += [</span><br><span class="line">      &quot;WEBRTC_LINUX&quot;,</span><br><span class="line">      &quot;WEBRTC_ANDROID&quot;,</span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">    if (build_with_mozilla) &#123;</span><br><span class="line">      defines += [ &quot;WEBRTC_ANDROID_OPENSLES&quot; ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  if (is_chromeos) &#123;</span><br><span class="line">    defines += [ &quot;CHROMEOS&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (rtc_sanitize_coverage != &quot;&quot;) &#123;</span><br><span class="line">    assert(is_clang, &quot;sanitizer coverage requires clang&quot;)</span><br><span class="line">    cflags += [ &quot;-fsanitize-coverage=$&#123;rtc_sanitize_coverage&#125;&quot; ]</span><br><span class="line">    ldflags += [ &quot;-fsanitize-coverage=$&#123;rtc_sanitize_coverage&#125;&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (is_ubsan) &#123;</span><br><span class="line">    cflags += [ &quot;-fsanitize=float-cast-overflow&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>其中引用了<code>is_ios</code>等变量，这些变量的定义在<code>build/config/BUILDCONFIG.gn</code>中：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line"># =============================================================================</span><br><span class="line"># OS DEFINITIONS</span><br><span class="line"># =============================================================================</span><br><span class="line">#</span><br><span class="line"># We set these various is_FOO booleans for convenience in writing OS-based</span><br><span class="line"># conditions.</span><br><span class="line">#</span><br><span class="line"># - is_android, is_chromeos, is_ios, and is_win should be obvious.</span><br><span class="line"># - is_mac is set only for desktop Mac. It is not set on iOS.</span><br><span class="line"># - is_posix is true for mac and any Unix-like system (basically everything</span><br><span class="line">#   except Fuchsia and Windows).</span><br><span class="line"># - is_linux is true for desktop Linux and ChromeOS, but not Android (which is</span><br><span class="line">#   generally too different despite being based on the Linux kernel).</span><br><span class="line">#</span><br><span class="line"># Do not add more is_* variants here for random lesser-used Unix systems like</span><br><span class="line"># aix or one of the BSDs. If you need to check these, just check the</span><br><span class="line"># current_os value directly.</span><br><span class="line"></span><br><span class="line">is_android = current_os == &quot;android&quot;</span><br><span class="line">is_chromeos = current_os == &quot;chromeos&quot;</span><br><span class="line">is_fuchsia = current_os == &quot;fuchsia&quot;</span><br><span class="line">is_ios = current_os == &quot;ios&quot;</span><br><span class="line">is_linux = current_os == &quot;chromeos&quot; || current_os == &quot;linux&quot;</span><br><span class="line">is_mac = current_os == &quot;mac&quot;</span><br><span class="line">is_nacl = current_os == &quot;nacl&quot;</span><br><span class="line">is_win = current_os == &quot;win&quot; || current_os == &quot;winuwp&quot;</span><br><span class="line"></span><br><span class="line">is_posix = !is_win &amp;&amp; !is_fuchsia</span><br></pre></td></tr></table></figure></div>
+
+<p>将各系统与对应的系统宏定义总结如下：</p>
+<ul>
+<li>iOS系统：<code>WEBRTC_MAC</code>、<code>WEBRTC_IOS</code>、<code>WEBRTC_POSIX</code></li>
+<li>maxOS系统：<code>WEBRTC_MAC</code>、<code>WEBRTC_POSIX</code></li>
+<li>Android系统：<code>WEBRTC_LINUX</code>、<code>WEBRTC_ANDROID</code>、<code>WEBRTC_POSIX</code></li>
+<li>Linux系统：<code>WEBRTC_LINUX</code>、<code>WEBRTC_POSIX</code></li>
+<li>Windows系统：<code>WEBRTC_WIN</code></li>
+</ul>
+<h2 id="3-添加源码目录和预编译依赖库"><a href="#3-添加源码目录和预编译依赖库" class="headerlink" title="3. 添加源码目录和预编译依赖库"></a>3. 添加源码目录和预编译依赖库</h2><p>（后续更新）</p>
+]]></content>
+      <tags>
+        <tag>WebRTC基础</tag>
+        <tag>GN</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>WebRTC基础之SDP</title>
+    <url>/2022/12/17/WebRTC%E5%9F%BA%E7%A1%80%E4%B9%8BSDP/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>WebRTC基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>WebRTC基础之基本流程分析</title>
+    <url>/2022/12/17/WebRTC%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<h2 id="1-基本流程简介"><a href="#1-基本流程简介" class="headerlink" title="1. 基本流程简介"></a>1. 基本流程简介</h2><p><img lazyload src="/images/loading.svg" data-src="/2022/12/17/WebRTC%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/1-1.png" alt="WebRTC基本流程"></p>
+<p>WebRTC的通话流程如上：</p>
+<ol>
+<li>发起端创建本地PeerConnection(简称 PC)对象，并创建Offer。</li>
+<li>发起端通过Signaling Server(HTTP服务)把Offer送到应答端</li>
+<li>应答端创建本地PC对象，把发起端的Offer设置给PC，然后获得Answer。</li>
+<li>应答端通过Signaling Server(长连接)把Answer发给发起端。</li>
+<li>发起端把应答端的Answer设置给PC。</li>
+<li>两端都收集本地PC的ICE Candidate(包括访问 TURN Server)，通过Signaling Server(长连接)发送给对端，对端把ICE Candidate设置给本地的PC。</li>
+<li>两端开始建立P2P的Socket，并收发音视频数据。</li>
+</ol>
+<p>下面是相关的名词解释：</p>
+<h3 id="1-1-PeerConnection"><a href="#1-1-PeerConnection" class="headerlink" title="1.1. PeerConnection"></a>1.1. PeerConnection</h3><p>WebRTC的目的是浏览器带来无插件化的P2P媒体通信解决方案。这个P2P的解决方案核心类是PeerConnection，通常简称PC。</p>
+<h3 id="1-2-Offer、Answer和SDP"><a href="#1-2-Offer、Answer和SDP" class="headerlink" title="1.2. Offer、Answer和SDP"></a>1.2. Offer、Answer和SDP</h3><p>Offer和Answer都属于SDP(Session Description Protocol)。<br>SDP是一种会话描述协议。电话会议、网络电话、视频流传输等都是一次会话。描述一个会话，最基础的要包含多媒体数据格式和网络传输地址，当然还要包括很多其他的配置信息。</p>
+<p>关于为什么需要描述会话：<br>首先就是参与会话的各个成员能力不对等，需要考虑各成员支持的媒体格式以及通话质量。</p>
+<p>关于会话的配置，也需要所有人的意见一致,这涉及一个媒体协商的过程：会话发起者先提出一些建议(Offer)，其他参与者再根据Offer给出自己的选择(Answer)，最终意见达成一致后才能开始会话。如果意见不一致则会报错。</p>
+<h3 id="1-3-ICE"><a href="#1-3-ICE" class="headerlink" title="1.3. ICE"></a>1.3. ICE</h3><p>ICE是用于UDP媒体传输的NAT穿透协议（适当扩展也能支持TCP协议），是对上述Offer&#x2F;Answer模型的扩展，会利用STUN、TURN协议完成工作。ICE会在SDP中增加传输地址记录值（IP+port+协议），然后对其进行连通性测试，测试通过之后就可以用于传输媒体数据。</p>
+<h3 id="1-4-STUN"><a href="#1-4-STUN" class="headerlink" title="1.4. STUN"></a>1.4. STUN</h3><p>STUN只是NAT穿透的一套工具，而非完整解决方案，它提供了获取一个内网连接(IP+port)对应的公网连接映射关系(NAT Banding)的机制，也提供了NAT Binding保活机制。WebRTC里就用到了这两种机制。</p>
+<h3 id="1-5-TURN"><a href="#1-5-TURN" class="headerlink" title="1.5. TURN"></a>1.5. TURN</h3><p>TURN协议是STUN协议的一个扩展，允许一个peer只使用一个<code>relay address</code>就可以和多个peer实现通信。<br>实现方式：为每一个peer分配一个中继地址，其他peer向A的中继地址发数据，TURN Server就会把数据转发给A。<br>实际上这并不是P2P，因为所有数据都经过了一次TURN Server的中转，但是在有些情况下，必须借助中转才能实现通信，具体会在后面展开介绍。</p>
+<h3 id="1-6-ICE-Candidate"><a href="#1-6-ICE-Candidate" class="headerlink" title="1.6. ICE Candidate"></a>1.6. ICE Candidate</h3><p>每个传输地址记录值都是一个ICE Candidate，可能有以一下4种：</p>
+<ul>
+<li>客户端从本机网络接口上获取的地址(host)</li>
+<li>STUN Server看到的该客户端的地址(server reflexive，缩写为 srflx)</li>
+<li>TURN Server为该客户端分配的中继地址(relayed)</li>
+<li>连通性测试种，在来自对方的数据报文里看到的地址(peer reflexive,缩写为prflx)</li>
+</ul>
+<p>两个客户端上述Candidate的任意组合也许都能连通，但实际上很多都不可用，而ICE的任务就是逐个尝试找出可以联通的组合。<br>网络接口地址对应的端口号是客户端自己分配的，如果有多个网络接口地址，都要一并携带。TURN Server可以同时取得srflx和relayed Candidate，而STUN Server只能取得srflx Candidate(所以coturn是一个TURN Server)。</p>
+<h2 id="2-核心API和Demo代码位置"><a href="#2-核心API和Demo代码位置" class="headerlink" title="2. 核心API和Demo代码位置"></a>2. 核心API和Demo代码位置</h2><p>注：此处仅对Windows端代码进行分析</p>
+<h3 id="2-1-全局初始化"><a href="#2-1-全局初始化" class="headerlink" title="2.1. 全局初始化"></a>2.1. 全局初始化</h3><p>所有平台的客户端在使用WebRTC的API之前都需要进行一些初始化操作，主要是设置实验性功能开关、初始化SSL，当然也可以启用trace、设置日志输出等。<br>Windows端的初始化代码在<code>examples/peerconnection/client/main.cc</code>中的<code>wWinMain</code>函数，也是整个程序的入口函数中。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="code"><pre><span class="line">rtc::WinsockInitializer winsock_init;</span><br><span class="line">rtc::Win32SocketServer w32_ss;</span><br><span class="line"><span class="function">rtc::Win32Thread <span class="title">w32_thread</span><span class="params">(&amp;w32_ss)</span></span>;</span><br><span class="line">rtc::ThreadManager::<span class="built_in">Instance</span>()-&gt;<span class="built_in">SetCurrentThread</span>(&amp;w32_thread);</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">webrtc::field_trial::<span class="built_in">InitFieldTrialsFromString</span>(forced_field_trials.<span class="built_in">c_str</span>());</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">rtc::<span class="built_in">InitializeSSL</span>();</span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="2-2-PeerConnectionFactory"><a href="#2-2-PeerConnectionFactory" class="headerlink" title="2.2. PeerConnectionFactory"></a>2.2. PeerConnectionFactory</h3><p>在初始化之后、使用PC之前，需要先创建和初始化<code>PeerConnectionFactory</code>对象，因为PC的创建使用了工厂模式。</p>
+<p>Windows端创建PC Factory的代码在<code>examples/peerconnection/client/conductor.cc</code>的<code>Conductor::InitializePeerConnection</code>函数里，这个函数会在用户呼叫对方（或收到对方呼叫信息）时调用。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="code"><pre><span class="line">peer_connection_factory_ = webrtc::<span class="built_in">CreatePeerConnectionFactory</span>(</span><br><span class="line">    <span class="literal">nullptr</span> <span class="comment">/* network_thread */</span>, <span class="literal">nullptr</span> <span class="comment">/* worker_thread */</span>,</span><br><span class="line">    <span class="literal">nullptr</span> <span class="comment">/* signaling_thread */</span>, <span class="literal">nullptr</span> <span class="comment">/* default_adm */</span>,</span><br><span class="line">    webrtc::<span class="built_in">CreateBuiltinAudioEncoderFactory</span>(),</span><br><span class="line">    webrtc::<span class="built_in">CreateBuiltinAudioDecoderFactory</span>(),</span><br><span class="line">    webrtc::<span class="built_in">CreateBuiltinVideoEncoderFactory</span>(),</span><br><span class="line">    webrtc::<span class="built_in">CreateBuiltinVideoDecoderFactory</span>(), <span class="literal">nullptr</span> <span class="comment">/* audio_mixer */</span>,</span><br><span class="line">    <span class="literal">nullptr</span> <span class="comment">/* audio_processing */</span>);</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="2-3-创建PeerConnection"><a href="#2-3-创建PeerConnection" class="headerlink" title="2.3. 创建PeerConnection"></a>2.3. 创建PeerConnection</h3><p>Windows端创建PC的代码在<code>examples/peerconnection/client/conductor.cc</code>的<code>Conductor::CreatePeerconnection</code>函数里，这个函数会在Demo首页peer列表元素被双击或者收到其他peer的呼叫信息后调用。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="code"><pre><span class="line">webrtc::PeerConnectionInterface::RTCConfiguration config;</span><br><span class="line">config.sdp_semantics = webrtc::SdpSemantics::kUnifiedPlan;</span><br><span class="line">config.enable_dtls_srtp = dtls;</span><br><span class="line">webrtc::PeerConnectionInterface::IceServer server;</span><br><span class="line">server.uri = <span class="built_in">GetPeerConnectionString</span>();</span><br><span class="line">config.servers.<span class="built_in">push_back</span>(server);</span><br><span class="line"></span><br><span class="line">peer_connection_ = peer_connection_factory_-&gt;<span class="built_in">CreatePeerConnection</span>(</span><br><span class="line">    config, <span class="literal">nullptr</span>, <span class="literal">nullptr</span>, <span class="keyword">this</span>);</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="2-4-创建Source和Track"><a href="#2-4-创建Source和Track" class="headerlink" title="2.4. 创建Source和Track"></a>2.4. 创建Source和Track</h3><p>创建PC的目的是为了收发音视频数据，收发的载体就是Track，而Track的数据来自于Source<br>Windows创建Source和Track的代码在<code>examples/peerconnection/client/conductor.cc</code>的<code>Conductor::AddTracks</code>函数里，创建完PC后就会被立即调用</p>
+<p>音频Source和Track的创建：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">rtc::scoped_refptr&lt;webrtc::AudioTrackInterface&gt; <span class="title">audio_track</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    peer_connection_factory_-&gt;CreateAudioTrack(</span></span></span><br><span class="line"><span class="params"><span class="function">        kAudioLabel, peer_connection_factory_-&gt;CreateAudioSource(</span></span></span><br><span class="line"><span class="params"><span class="function">                          cricket::AudioOptions())))</span></span>;</span><br><span class="line"><span class="keyword">auto</span> result_or_error = peer_connection_-&gt;<span class="built_in">AddTrack</span>(audio_track, &#123;kStreamId&#125;);</span><br></pre></td></tr></table></figure></div>
+
+<p>只需要调用PC Factory的接口创建Source和Track，然后把Track添加到PC中即可。</p>
+<p>视频Source和Track的创建：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="code"><pre><span class="line">rtc::scoped_refptr&lt;CapturerTrackSource&gt; video_device =</span><br><span class="line">    CapturerTrackSource::<span class="built_in">Create</span>();</span><br><span class="line"><span class="keyword">if</span> (video_device) &#123;</span><br><span class="line">  <span class="function">rtc::scoped_refptr&lt;webrtc::VideoTrackInterface&gt; <span class="title">video_track_</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">      peer_connection_factory_-&gt;CreateVideoTrack(kVideoLabel, video_device))</span></span>;</span><br><span class="line">  main_wnd_-&gt;<span class="built_in">StartLocalRenderer</span>(video_track_);</span><br><span class="line"></span><br><span class="line">  result_or_error = peer_connection_-&gt;<span class="built_in">AddTrack</span>(video_track_, &#123;kStreamId&#125;);</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><code>rtc::scoped_refptr</code>是WebRTC中定义的智能指针类型。<code>CapturerTrackSource</code>是Windows Demo对WebRTC视频采集接口类做的封装，实现了Source接口，所以可以用于创建Track。其内部会创建一个<code>Capturer</code>对象，视频数据的传递路径也是<code>Capturer-&gt;Source-&gt;Track</code>。</p>
+<h3 id="2-5-创建Offer"><a href="#2-5-创建Offer" class="headerlink" title="2.5. 创建Offer"></a>2.5. 创建Offer</h3><p>添加完Track之后，需要明确需要发送哪些数据，此时开始SDP协商，首先是发起端创建Offer，并将其作为本地SDP设置给PC对象，然后把Offer通过Signaling Server交给应答端。</p>
+<p>Windows创建Offer的代码在<code>examples/peerconnection/client/conductor.cc</code>的<code>Conductor::ConnectToPeer</code>函数中，在添加完Track后就会被立即调用。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="code"><pre><span class="line">peer_connection_-&gt;<span class="built_in">CreateOffer</span>(</span><br><span class="line">    <span class="keyword">this</span>, webrtc::PeerConnectionInterface::<span class="built_in">RTCOfferAnswerOptions</span>());</span><br></pre></td></tr></table></figure></div>
+
+<p>这里并没有设置任何选项表明是否接受数据，因为<code>AddTrack</code>默认情况下也会认为需要接收数据。<br>创建成功的回调为<code>Conductor::OnSuccess</code>函数，其中包含了把SDP设置给PC和把Offer发送给应答端的逻辑：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="code"><pre><span class="line">peer_connection_-&gt;<span class="built_in">SetLocalDescription</span>(</span><br><span class="line">    DummySetSessionDescriptionObserver::<span class="built_in">Create</span>(), desc);</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">Json::StyledWriter writer;</span><br><span class="line">Json::Value jmessage;</span><br><span class="line">jmessage[kSessionDescriptionTypeName] =</span><br><span class="line">    webrtc::<span class="built_in">SdpTypeToString</span>(desc-&gt;<span class="built_in">GetType</span>());</span><br><span class="line">jmessage[kSessionDescriptionSdpName] = sdp;</span><br><span class="line"><span class="built_in">SendMessage</span>(writer.<span class="built_in">write</span>(jmessage));</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="2-6-创建Answer"><a href="#2-6-创建Answer" class="headerlink" title="2.6. 创建Answer"></a>2.6. 创建Answer</h3><p>应答端拿到发起端的Offer之后，先将其设置给PC对象，然后创建Answer并设置给PC对象，最后将Answer通过Signaling Server发送到发起端，发起端拿到Answer之后，也需要把Answer设置给PC对象。<br>Windows设置Offer的代码在<code>examples/peerconnection/client/conductor.cc</code>的<code>Conductor::OnMessageFromPeer</code>函数中，这个函数用于处理来自Signaling Server的消息。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="code"><pre><span class="line">peer_connection_-&gt;<span class="built_in">SetRemoteDescription</span>(</span><br><span class="line">    DummySetSessionDescriptionObserver::<span class="built_in">Create</span>(),</span><br><span class="line">    session_description.<span class="built_in">release</span>());</span><br></pre></td></tr></table></figure></div>
+
+<p>Windows Demo创建Answer也没有等待Offer设置成功回调。创建Answer的代码如下：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="code"><pre><span class="line">peer_connection_-&gt;<span class="built_in">CreateAnswer</span>(</span><br><span class="line">    <span class="keyword">this</span>, webrtc::PeerConnectionInterface::<span class="built_in">RTCOfferAnswerOptions</span>());</span><br></pre></td></tr></table></figure></div>
+
+<p>创建Answer成功后，设置给PC、发送给发起端的代码和创建Offer成功后的处理代码是同一个函数。<br>同样的，发起端收到Answer后，也是调用<code>setRemoteDescription</code>设置给PC对象。具体代码和应答端设置Offer是一样。</p>
+<h3 id="2-7-ICE-Candidate回调和设置"><a href="#2-7-ICE-Candidate回调和设置" class="headerlink" title="2.7.ICE Candidate回调和设置"></a>2.7.ICE Candidate回调和设置</h3><p>通话双方交换并设置了SDP之后，下一步就是交换并设置ICE Candidate、建立P2P连接。</p>
+<p>Windows收到本地ICE Candidate的回调函数为<code>examples/peerconnection/client/conductor.cc</code>的<code>Conductor::OnIceCandidate</code>函数，它是<code>PeerConnectionObserver</code>的回调函数之一。设置本地SDP(<code>SetLocalDescription</code>)会启动ICE Candidate收集过程，收集到之后会回调该函数。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="code"><pre><span class="line">Json::StyledWriter writer;</span><br><span class="line">Json::Value jmessage;</span><br><span class="line"></span><br><span class="line">jmessage[kCandidateSdpMidName] = candidate-&gt;<span class="built_in">sdp_mid</span>();</span><br><span class="line">jmessage[kCandidateSdpMlineIndexName] = candidate-&gt;<span class="built_in">sdp_mline_index</span>();</span><br><span class="line">std::string sdp;</span><br><span class="line"><span class="keyword">if</span> (!candidate-&gt;<span class="built_in">ToString</span>(&amp;sdp)) &#123;</span><br><span class="line">  <span class="built_in">RTC_LOG</span>(LS_ERROR) &lt;&lt; <span class="string">&quot;Failed to serialize candidate&quot;</span>;</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line">jmessage[kCandidateSdpName] = sdp;</span><br><span class="line"><span class="built_in">SendMessage</span>(writer.<span class="built_in">write</span>(jmessage));</span><br></pre></td></tr></table></figure></div>
+
+<p>其中的处理也是把ICE Candidate发送给对端。对端收到ICE Candidate后，会在<code>Conductor::OnMessageFromPeer</code>函数里添加给PC对象：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="code"><pre><span class="line">std::unique_ptr&lt;webrtc::SessionDescriptionInterface&gt; session_description =</span><br><span class="line">    webrtc::<span class="built_in">CreateSessionDescription</span>(type, sdp, &amp;error);</span><br><span class="line"><span class="keyword">if</span> (!session_description) &#123;</span><br><span class="line">  <span class="built_in">RTC_LOG</span>(WARNING) &lt;&lt; <span class="string">&quot;Can&#x27;t parse received session description message. &quot;</span></span><br><span class="line">                      <span class="string">&quot;SdpParseError was: &quot;</span></span><br><span class="line">                    &lt;&lt; error.description;</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>Windows Demo 没有使用一个队列保存创建PC前收到的消息。如果收到消息时PC尚未创建，就会立即创建PC，所以不会有问题。</p>
+<h3 id="2-8-ICE连接状态回调"><a href="#2-8-ICE连接状态回调" class="headerlink" title="2.8. ICE连接状态回调"></a>2.8. ICE连接状态回调</h3><p>交换了SDP后，通话两端就开始建立P2P连接了。对于这个过程的状态变化，可以监听PC的ICE连接状态回调。</p>
+<p>Windows的回调定义为：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">OnIceConnectionChange</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    PeerConnectionInterface::IceConnectionState new_state)</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>其中状态码的定义为：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">IceConnectionState</span> &#123;</span><br><span class="line">  kIceConnectionNew,</span><br><span class="line">  kIceConnectionChecking,</span><br><span class="line">  kIceConnectionConnected,</span><br><span class="line">  kIceConnectionCompleted,</span><br><span class="line">  kIceConnectionFailed,</span><br><span class="line">  kIceConnectionDisconnected,</span><br><span class="line">  kIceConnectionClosed,</span><br><span class="line">  kIceConnectionMax,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<p>几个常用的状态为：</p>
+<ul>
+<li><code>kIceConnectionConnected</code>：ICE连接建立成功的状态，此状态下可以收发音视频数据</li>
+<li><code>kIceConnectionDisconnected</code>：ICE连接断开后的状态</li>
+<li><code>kIceConnectionFailed</code>：ICE连接建立失败的状态</li>
+</ul>
+<h3 id="2-9-核心API回顾"><a href="#2-9-核心API回顾" class="headerlink" title="2.9. 核心API回顾"></a>2.9. 核心API回顾</h3><p>首先是几个重要的概念：</p>
+<ul>
+<li><code>Capturer</code>：负责数据采集，只有视频才有这一层抽象，其有多种实现，包括相机采集、录屏采集、视频文件采集等。</li>
+<li><code>Sources</code>：数据源，数据来自于<code>Capturer</code>。它把数据交给<code>Track</code></li>
+<li><code>Track</code>：媒体数据交换的载体，发送端把本地的<code>Track</code>发送给远程的接收端</li>
+<li><code>Sink</code>：<code>Track</code>数据的消费者，只有视频才有这一层封装。发送端的视频本地预览、接收到收到远程视频后的渲染都是<code>Sink</code></li>
+<li><code>Transceiver</code>：负责收发媒体数据（以<code>Track</code>为载体）</li>
+</ul>
+<p>以视频为例，数据由发送端的Capturer采集，交给Source，再交给本地的Track，然后兵分靓丽：一路由本地Sink进行预览，一路由Transceiver发送给接收端。接收端Track把数据交给Sink渲染。</p>
+]]></content>
+  </entry>
 </search>

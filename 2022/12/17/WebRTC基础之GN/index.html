@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    <meta name="description" content="Hexo Theme Redefine">
+    <meta name="author" content="Shiszhi">
+    
+    <title>
+        
+            WebRTC基础之GN |
+        
+        Shiszhi&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/css/v5-font-face.min.css">
+
+    
+<link rel="stylesheet" href="/css/duotone.min.css">
+
+    
+<link rel="stylesheet" href="/css/brands.min.css">
+
+    
+<link rel="stylesheet" href="/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/css/brands.min.css">
+
+    
+<link rel="stylesheet" href="/css/css2.css">
+
+    <link rel="stylesheet" href="//evan.beee.top/css/waline.css"/>
+    <script src="//evan.beee.top/js/waline.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script id="hexo-configurations">
+    let REDEFINE = window.REDEFINE || {};
+    REDEFINE.hexo_config = {"hostname":"shis-zhi.github.io","root":"/","language":"en","path":"search.xml"};
+    REDEFINE.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#005080","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"240px","content_max_width":"960px","nav_color":{"left":"#f78736","right":"#367df7","transparency":35},"hover":{"shadow":true,"scale":false},"first_screen":{"enable":true,"background_image":{"light":"https://img-blog.csdnimg.cn/20210120123514329.jpg","dark":"https://img-blog.csdnimg.cn/20210120123514329.jpg"},"title_color":{"light":"#fff","dark":"#323739"},"description":""},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true},"pjax":{"enable":true},"lazyload":{"enable":true},"version":"0.3.4"};
+    REDEFINE.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fas fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+    
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                Shiszhi&#39;s Blog
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">TAGS</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation"><h1 style="font-size:2rem; font-weight: bold; margin: 10px 0;">WebRTC基础之GN</h1></span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/avatar.svg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Shiszhi</span>
+                        
+                            <span class="author-label">lol</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-duotone fa-pen-line"></i>&nbsp;
+        <span class="pc">2022-12-17 15:31:05</span>
+        <span class="mobile">2022-12-17 15:31</span>
+    </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-duotone fa-tags"></i></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/WebRTC%E5%9F%BA%E7%A1%80/">WebRTC基础</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/GN/">GN</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>1.1k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>5 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h2 id="1-GN相关介绍"><a href="#1-GN相关介绍" class="headerlink" title="1. GN相关介绍"></a>1. GN相关介绍</h2><p><code>GN</code>是谷歌用来生成<code>Ninja</code>配置文件的工具。<br><code>GN</code>的配置文件使用<code>Python</code>语法，WebRTC源码根目录的<code>BUILD.gn</code>文件是整个项目的配置文件，在其中引用了诸如<code>webrtc.gni</code>等配置文件，这些配置文件中定义了很多目标模板、变量等。<br><code>BUILD.gn</code>里还定义了一些构建目标，比如：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">rtc_static_library(&quot;webrtc&quot;) &#123;</span><br><span class="line">  # Only the root target and the test should depend on this.</span><br><span class="line">  visibility = [</span><br><span class="line">    &quot;//:default&quot;,</span><br><span class="line">    &quot;//:webrtc_lib_link_test&quot;,</span><br><span class="line">  ]</span><br><span class="line"></span><br><span class="line">  sources = []</span><br><span class="line">  complete_static_lib = true</span><br><span class="line">  suppressed_configs += [ &quot;//build/config/compiler:thin_archive&quot; ]</span><br><span class="line">  defines = []</span><br><span class="line"></span><br><span class="line">  deps = [</span><br><span class="line">    &quot;:webrtc_common&quot;,</span><br><span class="line">    &quot;api:create_peerconnection_factory&quot;,</span><br><span class="line">    &quot;api:libjingle_peerconnection_api&quot;,</span><br><span class="line">    &quot;api:rtc_error&quot;,</span><br><span class="line">    &quot;api:transport_api&quot;,</span><br><span class="line">    &quot;api/crypto&quot;,</span><br><span class="line">    &quot;api/rtc_event_log:rtc_event_log_factory&quot;,</span><br><span class="line">    &quot;api/task_queue&quot;,</span><br><span class="line">    &quot;api/task_queue:default_task_queue_factory&quot;,</span><br><span class="line">    &quot;audio&quot;,</span><br><span class="line">    &quot;call&quot;,</span><br><span class="line">    &quot;common_audio&quot;,</span><br><span class="line">    &quot;common_video&quot;,</span><br><span class="line">    &quot;logging:rtc_event_log_api&quot;,</span><br><span class="line">    &quot;media&quot;,</span><br><span class="line">    &quot;modules&quot;,</span><br><span class="line">    &quot;modules/video_capture:video_capture_internal_impl&quot;,</span><br><span class="line">    &quot;p2p:rtc_p2p&quot;,</span><br><span class="line">    &quot;pc:libjingle_peerconnection&quot;,</span><br><span class="line">    &quot;pc:peerconnection&quot;,</span><br><span class="line">    &quot;pc:rtc_pc&quot;,</span><br><span class="line">    &quot;pc:rtc_pc_base&quot;,</span><br><span class="line">    &quot;rtc_base&quot;,</span><br><span class="line">    &quot;sdk&quot;,</span><br><span class="line">    &quot;video&quot;,</span><br><span class="line">  ]</span><br><span class="line">  # ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>下面简单解释一下各个部分的含义：</p>
+<ul>
+<li><code>rtc_static_library</code>：通常会基于一些模板定义构建目标，常用的有静态库(<code>rtc_static_library</code>)、动态库(<code>rtc_shared_library</code>)和可执行程序(<code>rtc_executable</code>)</li>
+<li><code>visibility</code>：用来指明这个目标可以被哪些其他目标依赖</li>
+<li><code>sources</code>：用来指明这个目标的源码文件，这里没有指定任何源码，因为所有源码都包含在其他的依赖目标中。</li>
+<li><code>deps</code>：用来指明依赖目标。在这部分以<code>:</code>开头的就是在同一个<code>BUILD.gn</code>中定义的目标；否则就是其他目录的<code>BUILD.gn</code>定义的目标。指定目录时可能会以<code>//</code>开头，比如<code>api</code>和<code>api/rtc_event_log</code>都是去子目录查找；指定目录如果不包含<code>:</code>，就是指和目录同名的目标，比如<code>audio</code>等价于<code>audio:audio</code>。</li>
+<li><code>complete_static_lib = true</code>和<code>suppressed_configs += [ &quot;//build/config/compiler:thin_archive&quot; ]</code>：是定义静态库时必须的，否则编译出来的静态库不完整（不会包含所有的目标文件）。</li>
+<li><code>defines</code>：用来定义宏。</li>
+</ul>
+<p>除了以上参数之外，还有几个参数比较常用：</p>
+<ul>
+<li><code>include_dirs</code>：用来指明C++头文件查找路径</li>
+<li><code>libs</code>：用来指明依赖的预编译库</li>
+<li><code>cflags</code>：用来指明编译选项</li>
+<li><code>ldflags</code>：用来指明链接选项</li>
+</ul>
+<p>上面的参数如果是列表，就都可以使用<code>=</code>进行覆盖赋值或使用<code>+=</code>进行增量赋值。</p>
+<h2 id="2-系统宏定义"><a href="#2-系统宏定义" class="headerlink" title="2. 系统宏定义"></a>2. 系统宏定义</h2><p>在<code>WebRTC</code>的源码中，有很多类似于<code>if defined(WEBRTC_IOS)</code>之类的宏定义检查，这是在同一个函数或者文件中。只有细微的平台差异需要使用不同的代码，因此根据不同的系统宏定义来控制只编译对应平台的代码。<br>上述宏的定义是通过<code>gn</code>配置文件来控制的，具体逻辑在源码根目录下<code>BUILD.gn</code>文件中的<code>config(&quot;common_inherited_config&quot;)代码块中</code>：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">config(&quot;common_inherited_config&quot;) &#123;</span><br><span class="line">  # ...</span><br><span class="line">  if (is_posix || is_fuchsia) &#123;</span><br><span class="line">    defines += [ &quot;WEBRTC_POSIX&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line">  if (is_ios) &#123;</span><br><span class="line">    defines += [</span><br><span class="line">      &quot;WEBRTC_MAC&quot;,</span><br><span class="line">      &quot;WEBRTC_IOS&quot;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">  if (is_linux) &#123;</span><br><span class="line">    defines += [ &quot;WEBRTC_LINUX&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line">  if (is_mac) &#123;</span><br><span class="line">    defines += [ &quot;WEBRTC_MAC&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line">  if (is_fuchsia) &#123;</span><br><span class="line">    defines += [ &quot;WEBRTC_FUCHSIA&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line">  if (is_win) &#123;</span><br><span class="line">    defines += [ &quot;WEBRTC_WIN&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line">  if (is_android) &#123;</span><br><span class="line">    defines += [</span><br><span class="line">      &quot;WEBRTC_LINUX&quot;,</span><br><span class="line">      &quot;WEBRTC_ANDROID&quot;,</span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">    if (build_with_mozilla) &#123;</span><br><span class="line">      defines += [ &quot;WEBRTC_ANDROID_OPENSLES&quot; ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  if (is_chromeos) &#123;</span><br><span class="line">    defines += [ &quot;CHROMEOS&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (rtc_sanitize_coverage != &quot;&quot;) &#123;</span><br><span class="line">    assert(is_clang, &quot;sanitizer coverage requires clang&quot;)</span><br><span class="line">    cflags += [ &quot;-fsanitize-coverage=$&#123;rtc_sanitize_coverage&#125;&quot; ]</span><br><span class="line">    ldflags += [ &quot;-fsanitize-coverage=$&#123;rtc_sanitize_coverage&#125;&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (is_ubsan) &#123;</span><br><span class="line">    cflags += [ &quot;-fsanitize=float-cast-overflow&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>其中引用了<code>is_ios</code>等变量，这些变量的定义在<code>build/config/BUILDCONFIG.gn</code>中：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"># =============================================================================</span><br><span class="line"># OS DEFINITIONS</span><br><span class="line"># =============================================================================</span><br><span class="line">#</span><br><span class="line"># We set these various is_FOO booleans for convenience in writing OS-based</span><br><span class="line"># conditions.</span><br><span class="line">#</span><br><span class="line"># - is_android, is_chromeos, is_ios, and is_win should be obvious.</span><br><span class="line"># - is_mac is set only for desktop Mac. It is not set on iOS.</span><br><span class="line"># - is_posix is true for mac and any Unix-like system (basically everything</span><br><span class="line">#   except Fuchsia and Windows).</span><br><span class="line"># - is_linux is true for desktop Linux and ChromeOS, but not Android (which is</span><br><span class="line">#   generally too different despite being based on the Linux kernel).</span><br><span class="line">#</span><br><span class="line"># Do not add more is_* variants here for random lesser-used Unix systems like</span><br><span class="line"># aix or one of the BSDs. If you need to check these, just check the</span><br><span class="line"># current_os value directly.</span><br><span class="line"></span><br><span class="line">is_android = current_os == &quot;android&quot;</span><br><span class="line">is_chromeos = current_os == &quot;chromeos&quot;</span><br><span class="line">is_fuchsia = current_os == &quot;fuchsia&quot;</span><br><span class="line">is_ios = current_os == &quot;ios&quot;</span><br><span class="line">is_linux = current_os == &quot;chromeos&quot; || current_os == &quot;linux&quot;</span><br><span class="line">is_mac = current_os == &quot;mac&quot;</span><br><span class="line">is_nacl = current_os == &quot;nacl&quot;</span><br><span class="line">is_win = current_os == &quot;win&quot; || current_os == &quot;winuwp&quot;</span><br><span class="line"></span><br><span class="line">is_posix = !is_win &amp;&amp; !is_fuchsia</span><br></pre></td></tr></table></figure></div>
+
+<p>将各系统与对应的系统宏定义总结如下：</p>
+<ul>
+<li>iOS系统：<code>WEBRTC_MAC</code>、<code>WEBRTC_IOS</code>、<code>WEBRTC_POSIX</code></li>
+<li>maxOS系统：<code>WEBRTC_MAC</code>、<code>WEBRTC_POSIX</code></li>
+<li>Android系统：<code>WEBRTC_LINUX</code>、<code>WEBRTC_ANDROID</code>、<code>WEBRTC_POSIX</code></li>
+<li>Linux系统：<code>WEBRTC_LINUX</code>、<code>WEBRTC_POSIX</code></li>
+<li>Windows系统：<code>WEBRTC_WIN</code></li>
+</ul>
+<h2 id="3-添加源码目录和预编译依赖库"><a href="#3-添加源码目录和预编译依赖库" class="headerlink" title="3. 添加源码目录和预编译依赖库"></a>3. 添加源码目录和预编译依赖库</h2><p>（后续更新）</p>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>Post title：WebRTC基础之GN</li>
+        <li>Post author：Shiszhi</li>
+        <li>Create time：2022-12-17 15:31:05</li>
+        <li>
+            Post link：https://shis-zhi.github.io/2022/12/17/WebRTC基础之GN/
+        </li>
+        <li>
+            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/WebRTC%E5%9F%BA%E7%A1%80/">#WebRTC基础</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item">
+                        <a href="/tags/GN/">#GN</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2022/12/17/WebRTC%E5%9F%BA%E7%A1%80%E4%B9%8BSDP/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">WebRTC基础之SDP</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/12/17/GN%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">GN工具介绍</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2020</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Shiszhi</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v0.3.4</a>
+        </div>
+        
+        
+    </div>
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fa-duotone fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div style="font-size: 1.3rem;margin-top: 0; margin-bottom: 0.8rem; transition-duration: 0.1s;"><i class="fa-solid fa-list-tree"></i> <strong>Contents</strong></div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-GN%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D"><span class="nav-text">1. GN相关介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%B3%BB%E7%BB%9F%E5%AE%8F%E5%AE%9A%E4%B9%89"><span class="nav-text">2. 系统宏定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B7%BB%E5%8A%A0%E6%BA%90%E7%A0%81%E7%9B%AE%E5%BD%95%E5%92%8C%E9%A2%84%E7%BC%96%E8%AF%91%E4%BE%9D%E8%B5%96%E5%BA%93"><span class="nav-text">3. 添加源码目录和预编译依赖库</span></a></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            REDEFINE.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            REDEFINE.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            REDEFINE.refresh();
+        });
+    });
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    <meta name="description" content="Hexo Theme Redefine">
+    <meta name="author" content="Shiszhi">
+    
+    <title>
+        
+            GN工具介绍 |
+        
+        Shiszhi&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/css/v5-font-face.min.css">
+
+    
+<link rel="stylesheet" href="/css/duotone.min.css">
+
+    
+<link rel="stylesheet" href="/css/brands.min.css">
+
+    
+<link rel="stylesheet" href="/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/css/brands.min.css">
+
+    
+<link rel="stylesheet" href="/css/css2.css">
+
+    <link rel="stylesheet" href="//evan.beee.top/css/waline.css"/>
+    <script src="//evan.beee.top/js/waline.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script id="hexo-configurations">
+    let REDEFINE = window.REDEFINE || {};
+    REDEFINE.hexo_config = {"hostname":"shis-zhi.github.io","root":"/","language":"en","path":"search.xml"};
+    REDEFINE.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#005080","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"240px","content_max_width":"960px","nav_color":{"left":"#f78736","right":"#367df7","transparency":35},"hover":{"shadow":true,"scale":false},"first_screen":{"enable":true,"background_image":{"light":"https://img-blog.csdnimg.cn/20210120123514329.jpg","dark":"https://img-blog.csdnimg.cn/20210120123514329.jpg"},"title_color":{"light":"#fff","dark":"#323739"},"description":""},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true},"pjax":{"enable":true},"lazyload":{"enable":true},"version":"0.3.4"};
+    REDEFINE.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fas fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+    
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                Shiszhi&#39;s Blog
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">TAGS</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation"><h1 style="font-size:2rem; font-weight: bold; margin: 10px 0;">GN工具介绍</h1></span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/avatar.svg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Shiszhi</span>
+                        
+                            <span class="author-label">lol</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-duotone fa-pen-line"></i>&nbsp;
+        <span class="pc">2022-12-17 13:00:33</span>
+        <span class="mobile">2022-12-17 13:00</span>
+    </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-duotone fa-tags"></i></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/GN/">GN</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>4.1k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>15 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h2 id="1-GN语言"><a href="#1-GN语言" class="headerlink" title="1. GN语言"></a>1. GN语言</h2><p>GN使用动态类型语言，具有以下类型：</p>
+<ul>
+<li>Boolean（true, false）</li>
+<li>64-bit signed integers</li>
+<li>Strings</li>
+<li>Lists</li>
+<li>Scopes（类似于dictionary）</li>
+</ul>
+<p>注意：<strong>GN中没有循环和用户定义的函数调用</strong></p>
+<h3 id="1-1-Strings"><a href="#1-1-Strings" class="headerlink" title="1.1. Strings"></a>1.1. <code>Strings</code></h3><p>String用双引号括起来，并且使用反斜杠作为转义字符。<br>仅支持以下转义序列：</p>
+<ul>
+<li><code>\&quot;</code> 表示符号<code>&quot;</code></li>
+<li><code>\$</code> 表示符号&#96;$&#96;&#96;</li>
+<li><code>\\</code> 表示符号<code>\</code><br>除以上用法外，反斜杠的任何用法都被视为符号<code>\</code></li>
+</ul>
+<p><code>$</code> 支持简单变量替换，将其后紧跟的单词替换为变量的值，如下例：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = &quot;mypath&quot;</span><br><span class="line">b = &quot;$a/foo.cc&quot; # b -&gt; &quot;mypath/foo.cc&quot;</span><br><span class="line">c = &quot;foo$&#123;a&#125;bar.cc&quot;# c -&gt; &quot;foomypathbar.cc&quot;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="1-2-Lists"><a href="#1-2-Lists" class="headerlink" title="1.2. Lists"></a>1.2. <code>Lists</code></h3><p>列表的长度无法获取。</p>
+<p>列表支持追加元素：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = [ &quot;first&quot; ]</span><br><span class="line">a += [ &quot;second&quot; ]  # [ &quot;first&quot;, &quot;second&quot; ]</span><br><span class="line">a += [ &quot;third&quot;, &quot;fourth&quot; ]  # [ &quot;first&quot;, &quot;second&quot;, &quot;third&quot;, &quot;fourth&quot; ] </span><br><span class="line">b = a + [ &quot;fifth&quot; ]  # [ &quot;first&quot;, &quot;second&quot;, &quot;third&quot;, &quot;fourth&quot;, &quot;fifth&quot; ]</span><br></pre></td></tr></table></figure></div>
+
+<p>列表也支持删除元素：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = [ &quot;first&quot;, &quot;second&quot;, &quot;third&quot;, &quot;first&quot; ]</span><br><span class="line">b = a - [ &quot;first&quot; ]  # [ &quot;second&quot;, &quot;third&quot; ]</span><br><span class="line">a -= [ &quot;second&quot; ]  # [ &quot;first&quot;, &quot;third&quot;, &quot;fourth&quot; ]</span><br></pre></td></tr></table></figure></div>
+
+<p>列表的<code>-</code>运算符搜索匹配项并且删除所有的匹配项，如果未找到匹配项，则会抛出错误。<br>列表支持索引（下标从0开始）：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = [ &quot;first&quot;, &quot;second&quot;, &quot;third&quot; ]</span><br><span class="line">b = a[1]  # -&gt; &quot;second&quot;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="1-3-Functions"><a href="#1-3-Functions" class="headerlink" title="1.3. Functions"></a>1.3. Functions</h3><p>简单函数与大多数其他语言类似：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(&quot;hello,world&quot;)</span><br><span class="line">assert(is_win, &quot;This should only be executed on Windows&quot;)</span><br></pre></td></tr></table></figure></div>
+
+<p>部分函数采用一个由{} 包围的代码块：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">static_library(&quot;mylibrary&quot;)&#123;</span><br><span class="line">    sources = [&quot;a.cc&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>用户无法自行定义函数，但是可以通过定义模板达到类似的效果，见后文</p>
+<h3 id="1-4-Scoping-and-execution"><a href="#1-4-Scoping-and-execution" class="headerlink" title="1.4. Scoping and execution"></a>1.4. Scoping and execution</h3><p>文件和<code>&#123;&#125;</code>块引入了新的作用域。<br>作用域是嵌套的，读取变量时会按照相反顺序搜索包含范围，直到找到匹配的名称。写入变量时，总是进入最里面的作用域。<br>除了最里面的作用域外，没有任何方法可以修改任何封闭范围，这意味着，当定义目标时，在块内执行的任何操作都不会泄漏到文件的其余部分。<br>对于<code>if/else</code>语句，即使使用了<code>&#123;&#125;</code>，也不会引入一个新的作用域，因此更改将在语句之外永久存在。</p>
+<h2 id="2-命名"><a href="#2-命名" class="headerlink" title="2. 命名"></a>2. 命名</h2><h3 id="2-1-文件以及目录名"><a href="#2-1-文件以及目录名" class="headerlink" title="2.1. 文件以及目录名"></a>2.1. 文件以及目录名</h3><p>三种可能的形式：<br>相对路径：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;foo.cc&quot;</span><br><span class="line">&quot;src/foo.cc&quot;</span><br><span class="line">&quot;../src/foo.cc&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>SourceTree绝对路径：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&quot;//net/foo.cc&quot;</span><br><span class="line">&quot;//base/test/foo.cc&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>系统绝对路径：（比较少见，多用于头文件目录）</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&quot;/usr/local/include/&quot;</span><br><span class="line">&quot;C:/Program Files/Windows Kits/Include&quot;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="2-2-标签"><a href="#2-2-标签" class="headerlink" title="2.2 标签"></a>2.2 标签</h3><p>可以参与依赖关系图的所有内容都由一个定义格式的字符串所标识，常见的标签如下所示：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;//base/test:test_support&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>它由一个SourceTree绝对路径，一个冒号和一个名称组成，这意味着在<code>src/base/test/BUILD.gn</code>中查找名为<code>test_support</code>的内容。</p>
+<p>规范标签通常还包括正在使用的工具链的标签。通常情况下，工具链标签是隐式继承的，但可以将其包含在指定的跨工具链的依赖中，如下：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;//base/test:test_support(//build/toolchain/win:msvc)&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>在这种情况下，系统会在文件<code>//build/toolchain/win</code>中查找名为<code>msvc</code>的工具链定义从而了解如何编译此目标.<br>如果要引用同一构建文件中的内容，可以省略路径名，只需以冒号开头：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;:base&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>标签可以指定为相对于当前目录</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&quot;source/plugin:myplugin&quot;</span><br><span class="line">&quot;../net:url_request&quot;</span><br></pre></td></tr></table></figure></div>
+
+<p>如果未指定名称，它将继承目录名：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&quot;//net&quot; = &quot;//net:net&quot;</span><br><span class="line">&quot;//tools/gn&quot; = &quot;//tools/gn:gn&quot;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="3-构建配置"><a href="#3-构建配置" class="headerlink" title="3. 构建配置"></a>3. 构建配置</h2><h3 id="3-1-总体构建流程"><a href="#3-1-总体构建流程" class="headerlink" title="3.1.总体构建流程"></a>3.1.总体构建流程</h3><ol>
+<li>在当前路径下寻找.gn 文件，并在目录树上遍历，直到找到一个.gn 文件，设置此目录为“源根目录”，并且解释该文件从而查找生成配置文件的名称</li>
+<li>执行构建配置文件（默认的工具链）</li>
+<li>加载根目录中的BUILD.gn</li>
+<li>递归加载其他目录中的BUILD.gn 从而解决所有当前依赖关系。如果在指定位置未找到BUILD文件，GN将在tools&#x2F;gn&#x2F;secondary 内的相应位置查找</li>
+<li>解决了目标的依赖关系后，将.ninja文件写入磁盘</li>
+<li>解决所有目标后，写入build.ninja</li>
+</ol>
+<h3 id="3-2-构建配置文件"><a href="#3-2-构建配置文件" class="headerlink" title="3.2. 构建配置文件"></a>3.2. 构建配置文件</h3><p>执行的首个文件是构建配置文件，此文件名在标记为存储库根的<code>.gn</code>文件中被指定。<br><strong>只有一个构建配置文件。</strong><br>此文件设置所有其他构建文件将在其中执行的范围。在此文件中设置的任何参数、变量、默认值等都将对构建过程中的所有文件可见。</p>
+<h3 id="3-3-构建参数"><a href="#3-3-构建参数" class="headerlink" title="3.3. 构建参数"></a>3.3. 构建参数</h3><p>参数可以从命令行（以及其他工具链）传入，可以声明接受哪些参数并指定默认值<br>在给定范围内多次声明给定参数是错误的。<br>通常，参数在导入的文件中声明（在生成的某些子集中间共享）或在主生成配置文件中声明（使其全局）。</p>
+<h3 id="3-4-目标默认值"><a href="#3-4-目标默认值" class="headerlink" title="3.4. 目标默认值"></a>3.4. 目标默认值</h3><p>可以为给定的目标类型设置一些默认值，通常在构建配置文件中完成，用以设置一个默认配置的列表，此列表定义每个目标类型的构建标志和其他设置信息。<br>例如，声明一个静态库时，将会应用静态库的目标默认值。目标可以覆盖、修改或保留这些值</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># This call is typically in the build config file (see above).</span><br><span class="line">set_defaults(&quot;static_library&quot;) &#123;</span><br><span class="line">  configs = [ &quot;//build:rtti_setup&quot;, &quot;//build:extra_warnings&quot; ]</span><br><span class="line">&#125;</span><br><span class="line"># This would be in your directory&#x27;s BUILD.gn file.</span><br><span class="line">static_library(&quot;mylib&quot;) &#123;</span><br><span class="line">  # At this point configs is set to [ &quot;//build:rtti_setup&quot;, &quot;//build:extra_warnings&quot; ]</span><br><span class="line">  # by default but may be modified.</span><br><span class="line">  configs -= &quot;//build:extra_warnings&quot;  # Don&#x27;t want these warnings.</span><br><span class="line">  configs += &quot;:mylib_config&quot;  # Add some more configs.</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>设置目标默认值的另一个用例是通过模板定义自己的目标类型并且希望指定某些默认值。</p>
+<h2 id="4-目标"><a href="#4-目标" class="headerlink" title="4. 目标"></a>4. 目标</h2><p>目标就是构建图中的节点，通常表示即将生成的某种可执行文件或库文件。<br>目标依赖于其他目标，内置目标类型包括：</p>
+<ul>
+<li>action: 运行脚本以生成文件</li>
+<li>action_foreach: 为每一个源文件运行一次脚本</li>
+<li>component: 可以配置为另一种类型的库</li>
+<li>executable: 生成可执行文件</li>
+<li>group: 引用一个或多个其他目标的虚拟依存关系节点</li>
+<li>shared_library: 一个.dll或.so</li>
+<li>source_set: 一个轻量级虚拟静态库（通常优于真实静态库，因为它可以更快地构建）</li>
+<li>static_library: 一个.lib或者.a文件 (通常你需要一个source_set)</li>
+<li>test: 生成可执行文件，但将其注释为测试</li>
+</ul>
+<p>可以扩展此功能，使用模板创建自定义目标类型。</p>
+<h3 id="4-1-配置"><a href="#4-1-配置" class="headerlink" title="4.1. 配置"></a>4.1. 配置</h3><p>配置是指定标志集（包括目录和定义）的命名对象。他们可以应用于目标并推送到相关目标。<br>定义一个配置：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">config(&quot;myconfig&quot;)&#123;</span><br><span class="line">    includes = [ &quot;src/include&quot; ]</span><br><span class="line">    defines = [ &quot;ENABLE_DOOM_MELON&quot; ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>将配置应用于目标：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">executable(&quot;doom_melon&quot;)&#123;</span><br><span class="line">    configs = [ &quot;:myconfig&quot; ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>构建配置文件通常指定设置默认配置列表的目标默认值。目标可以根据需要添加或删除到此列表。因此，在实践中，您通常会使用<code>configs += &quot;：myconfig&quot;</code>附加到默认值列表中。</p>
+<h3 id="4-2-公共配置"><a href="#4-2-公共配置" class="headerlink" title="4.2. 公共配置"></a>4.2. 公共配置</h3><p>一个目标可以将设置应用于依赖他的其他目标。<br>最常见的例子是第三方目标，需要一些定义或包含目录才能正确编译其标头。<br>你希望这些设置既适用于第三方库本身的编译，也适用于使用该库的所有目标。<br>为了实现以上目标，可以使用要应用的设置编写配置</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">config(&quot;my_external_library_config&quot;) &#123;</span><br><span class="line">  includes = &quot;.&quot;</span><br><span class="line">  defines = [ &quot;DISABLE_JANK&quot; ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>然后将此配置作为公共配置添加到目标。它既适用于目标，也适用于直接依赖它的目标。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">shared_library(&quot;my_external_library&quot;) &#123;</span><br><span class="line">  ...</span><br><span class="line">  # Targets that depend on this get this config applied.</span><br><span class="line">  public_configs = [ &quot;:my_external_library_config&quot; ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>通过将你的目标添加为公共依赖项，依赖目标可以反过来将其转发到依赖树的另一个级别。<br>通过将目标设置为<code>all_dependent_config</code>，可以将配置转发给所有依赖项直到链接边界。</p>
+<h2 id="5-工具链"><a href="#5-工具链" class="headerlink" title="5.工具链"></a>5.工具链</h2><p>工具链是一组构建命令，用于运行不同类型的输入文件和链接任务。<br>构建中可以有多个工具链。最简单的是将每一个都视为完全独立的构建，它们之间可以有额外的依赖关系。例如，这意味着32位Windows构建可能依赖于64位助手目标。<br>当一个目标指定对另一个目标的依赖关系时，将继承当前工具链，除非它被显式重写。</p>
+<h3 id="5-1-工具链和构建配置"><a href="#5-1-工具链和构建配置" class="headerlink" title="5.1.工具链和构建配置"></a>5.1.工具链和构建配置</h3><p>当您有一个只有一个工具链的简单构建时，构建配置文件仅在构建开始时加载一次。它必须调用<code>set_default_toolchain</code>来告诉GN要使用的工具链定义的标签。此工具链定义包含用于编译器和链接器的命令。工具链定义的<code>toolchain_args</code>部分会被忽略。<br>当目标依赖于使用不同工具链的目标时，GN将使用该辅助工具链启动构建以解析目标。GN将使用工具链定义中指定的参数加载构建配置文件。由于工具链已知，因此忽略对<code>set_default_toolchain</code>工具链的调用。<br>因此，工具链配置是双向的。在默认工具链（即主构建目标）中，配置从构建配置文件流向工具链：构建配置文件查看构建状态（操作系统类型、CPU架构等），并决定使用哪个工具链（通过<code>set_default_toolchain</code>工具链）。在辅助工具链中，配置从工具链流向构建配置文件：工具链定义中的<code>toolchain_args</code>指定重新调用构建的参数。</p>
+<h3 id="5-2-工具链示例"><a href="#5-2-工具链示例" class="headerlink" title="5.2. 工具链示例"></a>5.2. 工具链示例</h3><p>假设默认版本是64位版本。这是基于当前系统的默认CPU架构，或者用户在命令行上传递了<code>target_CPU=&quot;x64&quot;</code>。构建配置文件可能如下所示，以设置默认工具链：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Set default toolchain only has an effect when run in the context of</span><br><span class="line"># the default toolchain. Pick the right one according to the current CPU</span><br><span class="line"># architecture.</span><br><span class="line">if (target_cpu == &quot;x64&quot;) &#123;</span><br><span class="line">  set_default_toolchain(&quot;//toolchains:64&quot;)</span><br><span class="line">&#125; else if (target_cpu == &quot;x86&quot;) &#123;</span><br><span class="line">  set_default_toolchain(&quot;//toolchains:32&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>如果64位目标想要依赖于32位二进制文件，它将使用<code>datadeps</code>指定依赖关系（<code>datadeps</code>类似于仅在运行时需要且不链接的<code>deps</code>，因为您无法链接32位和64位库）。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">executable(&quot;my_program&quot;) &#123;</span><br><span class="line">  ...</span><br><span class="line">  if (target_cpu == &quot;x64&quot;) &#123;</span><br><span class="line">    # The 64-bit build needs this 32-bit helper.</span><br><span class="line">    datadeps = [ &quot;:helper(//toolchains:32)&quot; ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">if (target_cpu == &quot;x86&quot;) &#123;</span><br><span class="line">  # Our helper library is only compiled in 32-bits.</span><br><span class="line">  shared_library(&quot;helper&quot;) &#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>上面引用的工具链文件（<code>toolchains/BUILD.gn</code>）将定义两个工具链：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">toolchain(&quot;32&quot;) &#123;</span><br><span class="line">  tool(&quot;cc&quot;) &#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">  ... more tools ...</span><br><span class="line">  # Arguments to the build when re-invoking as a secondary toolchain.</span><br><span class="line">  toolchain_args() &#123;</span><br><span class="line">    toolchain_cpu = &quot;x86&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">toolchain(&quot;64&quot;) &#123;</span><br><span class="line">  tool(&quot;cc&quot;) &#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">  ... more tools ...</span><br><span class="line">  # Arguments to the build when re-invoking as a secondary toolchain.</span><br><span class="line">  toolchain_args() &#123;</span><br><span class="line">    toolchain_cpu = &quot;x64&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>工具链参数明确指定了CPU架构，因此，如果目标依赖于使用该工具链的某些东西，则在重新调用构建时将设置该CPU架构。默认工具链忽略这些参数，因为在知道它们时，构建配置已经运行。通常，工具链参数和用于设置默认工具链的条件应该一致。<br>多构建设置的好处是，可以在目标中编写引用当前工具链状态的条件。构建文件将在每个工具链的不同状态下重新运行。对于上面的<code>my_program</code>示例，您可以看到它查询CPU架构，只为程序的64位构建添加了依赖项。32位构建不会获得这种依赖关系。</p>
+<h3 id="5-3-声明工具链"><a href="#5-3-声明工具链" class="headerlink" title="5.3. 声明工具链"></a>5.3. 声明工具链</h3><p>工具链使用toolchain命令声明，该命令设置用于每个编译和链接操作的命令。该工具链还指定了一组参数，以在执行时传递给构建配置文件。这允许你将配置信息传递给备用工具链。</p>
+<h2 id="6-模板"><a href="#6-模板" class="headerlink" title="6. 模板"></a>6. 模板</h2><p>模板是GN重用代码的主要方式。通常，模板会扩展到一个或多个其他目标类型。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Declares static library consisting of rules to build all of the IDL files into</span><br><span class="line"># compiled code.</span><br><span class="line">template(&quot;idl&quot;) &#123;</span><br><span class="line">  source_set(target_name) &#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>通常，您的模板定义将放在<code>.gni</code>文件中，用户将导入该文件以查看模板定义：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import(&quot;//tools/idl_compiler.gni&quot;)</span><br><span class="line">idl(&quot;my_interfaces&quot;) &#123;</span><br><span class="line">  sources = [ &quot;a.idl&quot;, &quot;b.idl&quot; ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>声明模板会在当时范围内的变量周围创建一个闭包。当调用模板时，魔术变量<code>invoker</code>用于从调用范围中读取变量。模板通常会将其感兴趣的值复制到自己的范围中：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">template(&quot;idl&quot;) &#123;</span><br><span class="line">  source_set(target_name) &#123;</span><br><span class="line">    sources = invoker.sources</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>模板执行时的当前目录将是调用生成文件的目录，而不是模板源文件的目录。因此，从模板调用器传递的文件是正确的（这通常是模板中大多数文件处理的原因）。<br>但是，如果模板本身有文件（可能它生成了一个运行脚本的操作），您将希望使用绝对路径（<code>//foo/…</code>）来引用这些文件，以说明当前目录在调用过程中是不可预测的。</p>
+<h2 id="7-其他功能"><a href="#7-其他功能" class="headerlink" title="7. 其他功能"></a>7. 其他功能</h2><h3 id="7-1-导入"><a href="#7-1-导入" class="headerlink" title="7.1. 导入"></a>7.1. 导入</h3><p>您可以使用<code>import</code>功能将<code>.gni</code>文件导入当前范围。这不是一个包含。导入的文件独立执行，生成的作用域复制到当前文件中。这允许缓存导入的结果，也防止了对包含的一些更“创造性”的使用。</p>
+<h3 id="7-2-路径处理"><a href="#7-2-路径处理" class="headerlink" title="7.2. 路径处理"></a>7.2. 路径处理</h3><p>通常，您需要创建一个文件名或一个相对于不同目录的文件名列表。这在运行脚本时尤其常见，脚本以生成输出目录作为当前目录执行，而生成文件通常指与其包含目录相关的文件。<br>您可以使用<code>rebase_path</code>转换目录。<br>将相对于当前目录的文件名转换为相对于根生成目录的文件名的典型用法是：<code>new_paths=rebase_path(&quot;myfile.c&quot;，root_build_dir)</code></p>
+<h3 id="7-3-模式"><a href="#7-3-模式" class="headerlink" title="7.3. 模式"></a>7.3. 模式</h3><p>模式用于为自定义目标类型的给定输入集生成输出文件名，并自动从<code>sources</code>变量中删除文件。</p>
+<h3 id="7-4-执行脚本"><a href="#7-4-执行脚本" class="headerlink" title="7.4. 执行脚本"></a>7.4. 执行脚本</h3><p>执行脚本有两种方法。GN中的所有外部脚本都是<code>Python</code>。<br>第一种方法是作为构建步骤。作为构建的一部分，这样的脚本将接受一些输入并生成一些输出。调用脚本的目标使用<code>&quot;action&quot;</code>目标类型声明。<br>第二种执行脚本的方法是在生成文件执行期间同步执行。在某些情况下，这对于确定要编译的文件集或获取生成文件可能依赖的某些系统配置是必要的。生成文件可以读取脚本的标准输出并以不同的方式对其进行操作。<br>同步脚本执行由<code>exec_script</code>函数完成。因为同步执行脚本需要暂停当前构建文件的执行，直到<code>Python</code>进程完成执行，所以依赖外部脚本的速度很慢，应该最小化。<br>您可以同步读取和写入文件，这在同步运行脚本时偶尔是必要的。典型的用例是传递比当前平台的命令行限制长的文件名列表。如果可能的话，应该避免这些功能。</p>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>Post title：GN工具介绍</li>
+        <li>Post author：Shiszhi</li>
+        <li>Create time：2022-12-17 13:00:33</li>
+        <li>
+            Post link：https://shis-zhi.github.io/2022/12/17/GN工具介绍/
+        </li>
+        <li>
+            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/tags/GN/">#GN</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2022/12/17/WebRTC%E5%9F%BA%E7%A1%80%E4%B9%8BGN/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">WebRTC基础之GN</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/12/15/C++STL%E4%B9%8B%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">C++STL之关联容器</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2020</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Shiszhi</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v0.3.4</a>
+        </div>
+        
+        
+    </div>
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fa-duotone fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div style="font-size: 1.3rem;margin-top: 0; margin-bottom: 0.8rem; transition-duration: 0.1s;"><i class="fa-solid fa-list-tree"></i> <strong>Contents</strong></div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-GN%E8%AF%AD%E8%A8%80"><span class="nav-text">1. GN语言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Strings"><span class="nav-text">1.1. Strings</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-Lists"><span class="nav-text">1.2. Lists</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-Functions"><span class="nav-text">1.3. Functions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-Scoping-and-execution"><span class="nav-text">1.4. Scoping and execution</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%91%BD%E5%90%8D"><span class="nav-text">2. 命名</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%96%87%E4%BB%B6%E4%BB%A5%E5%8F%8A%E7%9B%AE%E5%BD%95%E5%90%8D"><span class="nav-text">2.1. 文件以及目录名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%A0%87%E7%AD%BE"><span class="nav-text">2.2 标签</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%9E%84%E5%BB%BA%E9%85%8D%E7%BD%AE"><span class="nav-text">3. 构建配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E6%80%BB%E4%BD%93%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B"><span class="nav-text">3.1.总体构建流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E6%9E%84%E5%BB%BA%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-text">3.2. 构建配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E6%9E%84%E5%BB%BA%E5%8F%82%E6%95%B0"><span class="nav-text">3.3. 构建参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E7%9B%AE%E6%A0%87%E9%BB%98%E8%AE%A4%E5%80%BC"><span class="nav-text">3.4. 目标默认值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%9B%AE%E6%A0%87"><span class="nav-text">4. 目标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E9%85%8D%E7%BD%AE"><span class="nav-text">4.1. 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%85%AC%E5%85%B1%E9%85%8D%E7%BD%AE"><span class="nav-text">4.2. 公共配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%B7%A5%E5%85%B7%E9%93%BE"><span class="nav-text">5.工具链</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E5%B7%A5%E5%85%B7%E9%93%BE%E5%92%8C%E6%9E%84%E5%BB%BA%E9%85%8D%E7%BD%AE"><span class="nav-text">5.1.工具链和构建配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E5%B7%A5%E5%85%B7%E9%93%BE%E7%A4%BA%E4%BE%8B"><span class="nav-text">5.2. 工具链示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E5%A3%B0%E6%98%8E%E5%B7%A5%E5%85%B7%E9%93%BE"><span class="nav-text">5.3. 声明工具链</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E6%A8%A1%E6%9D%BF"><span class="nav-text">6. 模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E5%85%B6%E4%BB%96%E5%8A%9F%E8%83%BD"><span class="nav-text">7. 其他功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E5%AF%BC%E5%85%A5"><span class="nav-text">7.1. 导入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-%E8%B7%AF%E5%BE%84%E5%A4%84%E7%90%86"><span class="nav-text">7.2. 路径处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-%E6%A8%A1%E5%BC%8F"><span class="nav-text">7.3. 模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-%E6%89%A7%E8%A1%8C%E8%84%9A%E6%9C%AC"><span class="nav-text">7.4. 执行脚本</span></a></li></ol></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            REDEFINE.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            REDEFINE.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            REDEFINE.refresh();
+        });
+    });
+</script>
+
+
+
+</body>
+</html>

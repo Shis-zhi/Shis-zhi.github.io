@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    <meta name="description" content="Hexo Theme Redefine">
+    <meta name="author" content="Shiszhi">
+    
+    <title>
+        
+            WebRTC基础之基本流程分析 |
+        
+        Shiszhi&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/css/v5-font-face.min.css">
+
+    
+<link rel="stylesheet" href="/css/duotone.min.css">
+
+    
+<link rel="stylesheet" href="/css/brands.min.css">
+
+    
+<link rel="stylesheet" href="/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/css/brands.min.css">
+
+    
+<link rel="stylesheet" href="/css/css2.css">
+
+    <link rel="stylesheet" href="//evan.beee.top/css/waline.css"/>
+    <script src="//evan.beee.top/js/waline.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script id="hexo-configurations">
+    let REDEFINE = window.REDEFINE || {};
+    REDEFINE.hexo_config = {"hostname":"shis-zhi.github.io","root":"/","language":"en","path":"search.xml"};
+    REDEFINE.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#005080","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"240px","content_max_width":"960px","nav_color":{"left":"#f78736","right":"#367df7","transparency":35},"hover":{"shadow":true,"scale":false},"first_screen":{"enable":true,"background_image":{"light":"https://img-blog.csdnimg.cn/20210120123514329.jpg","dark":"https://img-blog.csdnimg.cn/20210120123514329.jpg"},"title_color":{"light":"#fff","dark":"#323739"},"description":""},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true},"pjax":{"enable":true},"lazyload":{"enable":true},"version":"0.3.4"};
+    REDEFINE.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="pjax-progress-icon">
+            <i class="fas fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+    
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                Shiszhi&#39;s Blog
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">TAGS</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation"><h1 style="font-size:2rem; font-weight: bold; margin: 10px 0;">WebRTC基础之基本流程分析</h1></span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/avatar.svg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Shiszhi</span>
+                        
+                            <span class="author-label">lol</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-duotone fa-pen-line"></i>&nbsp;
+        <span class="pc">2022-12-17 19:15:22</span>
+        <span class="mobile">2022-12-17 19:15</span>
+    </span>
+    
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>2.5k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>10 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h2 id="1-基本流程简介"><a href="#1-基本流程简介" class="headerlink" title="1. 基本流程简介"></a>1. 基本流程简介</h2><p><img lazyload src="/images/loading.svg" data-src="/2022/12/17/WebRTC%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/1-1.png" alt="WebRTC基本流程"></p>
+<p>WebRTC的通话流程如上：</p>
+<ol>
+<li>发起端创建本地PeerConnection(简称 PC)对象，并创建Offer。</li>
+<li>发起端通过Signaling Server(HTTP服务)把Offer送到应答端</li>
+<li>应答端创建本地PC对象，把发起端的Offer设置给PC，然后获得Answer。</li>
+<li>应答端通过Signaling Server(长连接)把Answer发给发起端。</li>
+<li>发起端把应答端的Answer设置给PC。</li>
+<li>两端都收集本地PC的ICE Candidate(包括访问 TURN Server)，通过Signaling Server(长连接)发送给对端，对端把ICE Candidate设置给本地的PC。</li>
+<li>两端开始建立P2P的Socket，并收发音视频数据。</li>
+</ol>
+<p>下面是相关的名词解释：</p>
+<h3 id="1-1-PeerConnection"><a href="#1-1-PeerConnection" class="headerlink" title="1.1. PeerConnection"></a>1.1. PeerConnection</h3><p>WebRTC的目的是浏览器带来无插件化的P2P媒体通信解决方案。这个P2P的解决方案核心类是PeerConnection，通常简称PC。</p>
+<h3 id="1-2-Offer、Answer和SDP"><a href="#1-2-Offer、Answer和SDP" class="headerlink" title="1.2. Offer、Answer和SDP"></a>1.2. Offer、Answer和SDP</h3><p>Offer和Answer都属于SDP(Session Description Protocol)。<br>SDP是一种会话描述协议。电话会议、网络电话、视频流传输等都是一次会话。描述一个会话，最基础的要包含多媒体数据格式和网络传输地址，当然还要包括很多其他的配置信息。</p>
+<p>关于为什么需要描述会话：<br>首先就是参与会话的各个成员能力不对等，需要考虑各成员支持的媒体格式以及通话质量。</p>
+<p>关于会话的配置，也需要所有人的意见一致,这涉及一个媒体协商的过程：会话发起者先提出一些建议(Offer)，其他参与者再根据Offer给出自己的选择(Answer)，最终意见达成一致后才能开始会话。如果意见不一致则会报错。</p>
+<h3 id="1-3-ICE"><a href="#1-3-ICE" class="headerlink" title="1.3. ICE"></a>1.3. ICE</h3><p>ICE是用于UDP媒体传输的NAT穿透协议（适当扩展也能支持TCP协议），是对上述Offer&#x2F;Answer模型的扩展，会利用STUN、TURN协议完成工作。ICE会在SDP中增加传输地址记录值（IP+port+协议），然后对其进行连通性测试，测试通过之后就可以用于传输媒体数据。</p>
+<h3 id="1-4-STUN"><a href="#1-4-STUN" class="headerlink" title="1.4. STUN"></a>1.4. STUN</h3><p>STUN只是NAT穿透的一套工具，而非完整解决方案，它提供了获取一个内网连接(IP+port)对应的公网连接映射关系(NAT Banding)的机制，也提供了NAT Binding保活机制。WebRTC里就用到了这两种机制。</p>
+<h3 id="1-5-TURN"><a href="#1-5-TURN" class="headerlink" title="1.5. TURN"></a>1.5. TURN</h3><p>TURN协议是STUN协议的一个扩展，允许一个peer只使用一个<code>relay address</code>就可以和多个peer实现通信。<br>实现方式：为每一个peer分配一个中继地址，其他peer向A的中继地址发数据，TURN Server就会把数据转发给A。<br>实际上这并不是P2P，因为所有数据都经过了一次TURN Server的中转，但是在有些情况下，必须借助中转才能实现通信，具体会在后面展开介绍。</p>
+<h3 id="1-6-ICE-Candidate"><a href="#1-6-ICE-Candidate" class="headerlink" title="1.6. ICE Candidate"></a>1.6. ICE Candidate</h3><p>每个传输地址记录值都是一个ICE Candidate，可能有以一下4种：</p>
+<ul>
+<li>客户端从本机网络接口上获取的地址(host)</li>
+<li>STUN Server看到的该客户端的地址(server reflexive，缩写为 srflx)</li>
+<li>TURN Server为该客户端分配的中继地址(relayed)</li>
+<li>连通性测试种，在来自对方的数据报文里看到的地址(peer reflexive,缩写为prflx)</li>
+</ul>
+<p>两个客户端上述Candidate的任意组合也许都能连通，但实际上很多都不可用，而ICE的任务就是逐个尝试找出可以联通的组合。<br>网络接口地址对应的端口号是客户端自己分配的，如果有多个网络接口地址，都要一并携带。TURN Server可以同时取得srflx和relayed Candidate，而STUN Server只能取得srflx Candidate(所以coturn是一个TURN Server)。</p>
+<h2 id="2-核心API和Demo代码位置"><a href="#2-核心API和Demo代码位置" class="headerlink" title="2. 核心API和Demo代码位置"></a>2. 核心API和Demo代码位置</h2><p>注：此处仅对Windows端代码进行分析</p>
+<h3 id="2-1-全局初始化"><a href="#2-1-全局初始化" class="headerlink" title="2.1. 全局初始化"></a>2.1. 全局初始化</h3><p>所有平台的客户端在使用WebRTC的API之前都需要进行一些初始化操作，主要是设置实验性功能开关、初始化SSL，当然也可以启用trace、设置日志输出等。<br>Windows端的初始化代码在<code>examples/peerconnection/client/main.cc</code>中的<code>wWinMain</code>函数，也是整个程序的入口函数中。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">rtc::WinsockInitializer winsock_init;</span><br><span class="line">rtc::Win32SocketServer w32_ss;</span><br><span class="line"><span class="function">rtc::Win32Thread <span class="title">w32_thread</span><span class="params">(&amp;w32_ss)</span></span>;</span><br><span class="line">rtc::ThreadManager::<span class="built_in">Instance</span>()-&gt;<span class="built_in">SetCurrentThread</span>(&amp;w32_thread);</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">webrtc::field_trial::<span class="built_in">InitFieldTrialsFromString</span>(forced_field_trials.<span class="built_in">c_str</span>());</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">rtc::<span class="built_in">InitializeSSL</span>();</span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="2-2-PeerConnectionFactory"><a href="#2-2-PeerConnectionFactory" class="headerlink" title="2.2. PeerConnectionFactory"></a>2.2. PeerConnectionFactory</h3><p>在初始化之后、使用PC之前，需要先创建和初始化<code>PeerConnectionFactory</code>对象，因为PC的创建使用了工厂模式。</p>
+<p>Windows端创建PC Factory的代码在<code>examples/peerconnection/client/conductor.cc</code>的<code>Conductor::InitializePeerConnection</code>函数里，这个函数会在用户呼叫对方（或收到对方呼叫信息）时调用。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">peer_connection_factory_ = webrtc::<span class="built_in">CreatePeerConnectionFactory</span>(</span><br><span class="line">    <span class="literal">nullptr</span> <span class="comment">/* network_thread */</span>, <span class="literal">nullptr</span> <span class="comment">/* worker_thread */</span>,</span><br><span class="line">    <span class="literal">nullptr</span> <span class="comment">/* signaling_thread */</span>, <span class="literal">nullptr</span> <span class="comment">/* default_adm */</span>,</span><br><span class="line">    webrtc::<span class="built_in">CreateBuiltinAudioEncoderFactory</span>(),</span><br><span class="line">    webrtc::<span class="built_in">CreateBuiltinAudioDecoderFactory</span>(),</span><br><span class="line">    webrtc::<span class="built_in">CreateBuiltinVideoEncoderFactory</span>(),</span><br><span class="line">    webrtc::<span class="built_in">CreateBuiltinVideoDecoderFactory</span>(), <span class="literal">nullptr</span> <span class="comment">/* audio_mixer */</span>,</span><br><span class="line">    <span class="literal">nullptr</span> <span class="comment">/* audio_processing */</span>);</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="2-3-创建PeerConnection"><a href="#2-3-创建PeerConnection" class="headerlink" title="2.3. 创建PeerConnection"></a>2.3. 创建PeerConnection</h3><p>Windows端创建PC的代码在<code>examples/peerconnection/client/conductor.cc</code>的<code>Conductor::CreatePeerconnection</code>函数里，这个函数会在Demo首页peer列表元素被双击或者收到其他peer的呼叫信息后调用。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">webrtc::PeerConnectionInterface::RTCConfiguration config;</span><br><span class="line">config.sdp_semantics = webrtc::SdpSemantics::kUnifiedPlan;</span><br><span class="line">config.enable_dtls_srtp = dtls;</span><br><span class="line">webrtc::PeerConnectionInterface::IceServer server;</span><br><span class="line">server.uri = <span class="built_in">GetPeerConnectionString</span>();</span><br><span class="line">config.servers.<span class="built_in">push_back</span>(server);</span><br><span class="line"></span><br><span class="line">peer_connection_ = peer_connection_factory_-&gt;<span class="built_in">CreatePeerConnection</span>(</span><br><span class="line">    config, <span class="literal">nullptr</span>, <span class="literal">nullptr</span>, <span class="keyword">this</span>);</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="2-4-创建Source和Track"><a href="#2-4-创建Source和Track" class="headerlink" title="2.4. 创建Source和Track"></a>2.4. 创建Source和Track</h3><p>创建PC的目的是为了收发音视频数据，收发的载体就是Track，而Track的数据来自于Source<br>Windows创建Source和Track的代码在<code>examples/peerconnection/client/conductor.cc</code>的<code>Conductor::AddTracks</code>函数里，创建完PC后就会被立即调用</p>
+<p>音频Source和Track的创建：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">rtc::scoped_refptr&lt;webrtc::AudioTrackInterface&gt; <span class="title">audio_track</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    peer_connection_factory_-&gt;CreateAudioTrack(</span></span></span><br><span class="line"><span class="params"><span class="function">        kAudioLabel, peer_connection_factory_-&gt;CreateAudioSource(</span></span></span><br><span class="line"><span class="params"><span class="function">                          cricket::AudioOptions())))</span></span>;</span><br><span class="line"><span class="keyword">auto</span> result_or_error = peer_connection_-&gt;<span class="built_in">AddTrack</span>(audio_track, &#123;kStreamId&#125;);</span><br></pre></td></tr></table></figure></div>
+
+<p>只需要调用PC Factory的接口创建Source和Track，然后把Track添加到PC中即可。</p>
+<p>视频Source和Track的创建：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">rtc::scoped_refptr&lt;CapturerTrackSource&gt; video_device =</span><br><span class="line">    CapturerTrackSource::<span class="built_in">Create</span>();</span><br><span class="line"><span class="keyword">if</span> (video_device) &#123;</span><br><span class="line">  <span class="function">rtc::scoped_refptr&lt;webrtc::VideoTrackInterface&gt; <span class="title">video_track_</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">      peer_connection_factory_-&gt;CreateVideoTrack(kVideoLabel, video_device))</span></span>;</span><br><span class="line">  main_wnd_-&gt;<span class="built_in">StartLocalRenderer</span>(video_track_);</span><br><span class="line"></span><br><span class="line">  result_or_error = peer_connection_-&gt;<span class="built_in">AddTrack</span>(video_track_, &#123;kStreamId&#125;);</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p><code>rtc::scoped_refptr</code>是WebRTC中定义的智能指针类型。<code>CapturerTrackSource</code>是Windows Demo对WebRTC视频采集接口类做的封装，实现了Source接口，所以可以用于创建Track。其内部会创建一个<code>Capturer</code>对象，视频数据的传递路径也是<code>Capturer-&gt;Source-&gt;Track</code>。</p>
+<h3 id="2-5-创建Offer"><a href="#2-5-创建Offer" class="headerlink" title="2.5. 创建Offer"></a>2.5. 创建Offer</h3><p>添加完Track之后，需要明确需要发送哪些数据，此时开始SDP协商，首先是发起端创建Offer，并将其作为本地SDP设置给PC对象，然后把Offer通过Signaling Server交给应答端。</p>
+<p>Windows创建Offer的代码在<code>examples/peerconnection/client/conductor.cc</code>的<code>Conductor::ConnectToPeer</code>函数中，在添加完Track后就会被立即调用。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">peer_connection_-&gt;<span class="built_in">CreateOffer</span>(</span><br><span class="line">    <span class="keyword">this</span>, webrtc::PeerConnectionInterface::<span class="built_in">RTCOfferAnswerOptions</span>());</span><br></pre></td></tr></table></figure></div>
+
+<p>这里并没有设置任何选项表明是否接受数据，因为<code>AddTrack</code>默认情况下也会认为需要接收数据。<br>创建成功的回调为<code>Conductor::OnSuccess</code>函数，其中包含了把SDP设置给PC和把Offer发送给应答端的逻辑：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">peer_connection_-&gt;<span class="built_in">SetLocalDescription</span>(</span><br><span class="line">    DummySetSessionDescriptionObserver::<span class="built_in">Create</span>(), desc);</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">Json::StyledWriter writer;</span><br><span class="line">Json::Value jmessage;</span><br><span class="line">jmessage[kSessionDescriptionTypeName] =</span><br><span class="line">    webrtc::<span class="built_in">SdpTypeToString</span>(desc-&gt;<span class="built_in">GetType</span>());</span><br><span class="line">jmessage[kSessionDescriptionSdpName] = sdp;</span><br><span class="line"><span class="built_in">SendMessage</span>(writer.<span class="built_in">write</span>(jmessage));</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="2-6-创建Answer"><a href="#2-6-创建Answer" class="headerlink" title="2.6. 创建Answer"></a>2.6. 创建Answer</h3><p>应答端拿到发起端的Offer之后，先将其设置给PC对象，然后创建Answer并设置给PC对象，最后将Answer通过Signaling Server发送到发起端，发起端拿到Answer之后，也需要把Answer设置给PC对象。<br>Windows设置Offer的代码在<code>examples/peerconnection/client/conductor.cc</code>的<code>Conductor::OnMessageFromPeer</code>函数中，这个函数用于处理来自Signaling Server的消息。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">peer_connection_-&gt;<span class="built_in">SetRemoteDescription</span>(</span><br><span class="line">    DummySetSessionDescriptionObserver::<span class="built_in">Create</span>(),</span><br><span class="line">    session_description.<span class="built_in">release</span>());</span><br></pre></td></tr></table></figure></div>
+
+<p>Windows Demo创建Answer也没有等待Offer设置成功回调。创建Answer的代码如下：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">peer_connection_-&gt;<span class="built_in">CreateAnswer</span>(</span><br><span class="line">    <span class="keyword">this</span>, webrtc::PeerConnectionInterface::<span class="built_in">RTCOfferAnswerOptions</span>());</span><br></pre></td></tr></table></figure></div>
+
+<p>创建Answer成功后，设置给PC、发送给发起端的代码和创建Offer成功后的处理代码是同一个函数。<br>同样的，发起端收到Answer后，也是调用<code>setRemoteDescription</code>设置给PC对象。具体代码和应答端设置Offer是一样。</p>
+<h3 id="2-7-ICE-Candidate回调和设置"><a href="#2-7-ICE-Candidate回调和设置" class="headerlink" title="2.7.ICE Candidate回调和设置"></a>2.7.ICE Candidate回调和设置</h3><p>通话双方交换并设置了SDP之后，下一步就是交换并设置ICE Candidate、建立P2P连接。</p>
+<p>Windows收到本地ICE Candidate的回调函数为<code>examples/peerconnection/client/conductor.cc</code>的<code>Conductor::OnIceCandidate</code>函数，它是<code>PeerConnectionObserver</code>的回调函数之一。设置本地SDP(<code>SetLocalDescription</code>)会启动ICE Candidate收集过程，收集到之后会回调该函数。</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Json::StyledWriter writer;</span><br><span class="line">Json::Value jmessage;</span><br><span class="line"></span><br><span class="line">jmessage[kCandidateSdpMidName] = candidate-&gt;<span class="built_in">sdp_mid</span>();</span><br><span class="line">jmessage[kCandidateSdpMlineIndexName] = candidate-&gt;<span class="built_in">sdp_mline_index</span>();</span><br><span class="line">std::string sdp;</span><br><span class="line"><span class="keyword">if</span> (!candidate-&gt;<span class="built_in">ToString</span>(&amp;sdp)) &#123;</span><br><span class="line">  <span class="built_in">RTC_LOG</span>(LS_ERROR) &lt;&lt; <span class="string">&quot;Failed to serialize candidate&quot;</span>;</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line">jmessage[kCandidateSdpName] = sdp;</span><br><span class="line"><span class="built_in">SendMessage</span>(writer.<span class="built_in">write</span>(jmessage));</span><br></pre></td></tr></table></figure></div>
+
+<p>其中的处理也是把ICE Candidate发送给对端。对端收到ICE Candidate后，会在<code>Conductor::OnMessageFromPeer</code>函数里添加给PC对象：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">std::unique_ptr&lt;webrtc::SessionDescriptionInterface&gt; session_description =</span><br><span class="line">    webrtc::<span class="built_in">CreateSessionDescription</span>(type, sdp, &amp;error);</span><br><span class="line"><span class="keyword">if</span> (!session_description) &#123;</span><br><span class="line">  <span class="built_in">RTC_LOG</span>(WARNING) &lt;&lt; <span class="string">&quot;Can&#x27;t parse received session description message. &quot;</span></span><br><span class="line">                      <span class="string">&quot;SdpParseError was: &quot;</span></span><br><span class="line">                    &lt;&lt; error.description;</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>Windows Demo 没有使用一个队列保存创建PC前收到的消息。如果收到消息时PC尚未创建，就会立即创建PC，所以不会有问题。</p>
+<h3 id="2-8-ICE连接状态回调"><a href="#2-8-ICE连接状态回调" class="headerlink" title="2.8. ICE连接状态回调"></a>2.8. ICE连接状态回调</h3><p>交换了SDP后，通话两端就开始建立P2P连接了。对于这个过程的状态变化，可以监听PC的ICE连接状态回调。</p>
+<p>Windows的回调定义为：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">OnIceConnectionChange</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    PeerConnectionInterface::IceConnectionState new_state)</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>其中状态码的定义为：</p>
+<div class="highlight-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">IceConnectionState</span> &#123;</span><br><span class="line">  kIceConnectionNew,</span><br><span class="line">  kIceConnectionChecking,</span><br><span class="line">  kIceConnectionConnected,</span><br><span class="line">  kIceConnectionCompleted,</span><br><span class="line">  kIceConnectionFailed,</span><br><span class="line">  kIceConnectionDisconnected,</span><br><span class="line">  kIceConnectionClosed,</span><br><span class="line">  kIceConnectionMax,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<p>几个常用的状态为：</p>
+<ul>
+<li><code>kIceConnectionConnected</code>：ICE连接建立成功的状态，此状态下可以收发音视频数据</li>
+<li><code>kIceConnectionDisconnected</code>：ICE连接断开后的状态</li>
+<li><code>kIceConnectionFailed</code>：ICE连接建立失败的状态</li>
+</ul>
+<h3 id="2-9-核心API回顾"><a href="#2-9-核心API回顾" class="headerlink" title="2.9. 核心API回顾"></a>2.9. 核心API回顾</h3><p>首先是几个重要的概念：</p>
+<ul>
+<li><code>Capturer</code>：负责数据采集，只有视频才有这一层抽象，其有多种实现，包括相机采集、录屏采集、视频文件采集等。</li>
+<li><code>Sources</code>：数据源，数据来自于<code>Capturer</code>。它把数据交给<code>Track</code></li>
+<li><code>Track</code>：媒体数据交换的载体，发送端把本地的<code>Track</code>发送给远程的接收端</li>
+<li><code>Sink</code>：<code>Track</code>数据的消费者，只有视频才有这一层封装。发送端的视频本地预览、接收到收到远程视频后的渲染都是<code>Sink</code></li>
+<li><code>Transceiver</code>：负责收发媒体数据（以<code>Track</code>为载体）</li>
+</ul>
+<p>以视频为例，数据由发送端的Capturer采集，交给Source，再交给本地的Track，然后兵分靓丽：一路由本地Sink进行预览，一路由Transceiver发送给接收端。接收端Track把数据交给Sink渲染。</p>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>Post title：WebRTC基础之基本流程分析</li>
+        <li>Post author：Shiszhi</li>
+        <li>Create time：2022-12-17 19:15:22</li>
+        <li>
+            Post link：https://shis-zhi.github.io/2022/12/17/WebRTC基础之基本流程分析/
+        </li>
+        <li>
+            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/12/17/WebRTC%E5%9F%BA%E7%A1%80%E4%B9%8BSDP/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">WebRTC基础之SDP</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2020</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Shiszhi</a>
+        </div>
+        
+            <script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v0.3.4</a>
+        </div>
+        
+        
+    </div>
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fa-duotone fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div style="font-size: 1.3rem;margin-top: 0; margin-bottom: 0.8rem; transition-duration: 0.1s;"><i class="fa-solid fa-list-tree"></i> <strong>Contents</strong></div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B%E7%AE%80%E4%BB%8B"><span class="nav-text">1. 基本流程简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-PeerConnection"><span class="nav-text">1.1. PeerConnection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-Offer%E3%80%81Answer%E5%92%8CSDP"><span class="nav-text">1.2. Offer、Answer和SDP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-ICE"><span class="nav-text">1.3. ICE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-STUN"><span class="nav-text">1.4. STUN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-TURN"><span class="nav-text">1.5. TURN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-ICE-Candidate"><span class="nav-text">1.6. ICE Candidate</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%A0%B8%E5%BF%83API%E5%92%8CDemo%E4%BB%A3%E7%A0%81%E4%BD%8D%E7%BD%AE"><span class="nav-text">2. 核心API和Demo代码位置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%85%A8%E5%B1%80%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">2.1. 全局初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-PeerConnectionFactory"><span class="nav-text">2.2. PeerConnectionFactory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%88%9B%E5%BB%BAPeerConnection"><span class="nav-text">2.3. 创建PeerConnection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E5%88%9B%E5%BB%BASource%E5%92%8CTrack"><span class="nav-text">2.4. 创建Source和Track</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-%E5%88%9B%E5%BB%BAOffer"><span class="nav-text">2.5. 创建Offer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-%E5%88%9B%E5%BB%BAAnswer"><span class="nav-text">2.6. 创建Answer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-ICE-Candidate%E5%9B%9E%E8%B0%83%E5%92%8C%E8%AE%BE%E7%BD%AE"><span class="nav-text">2.7.ICE Candidate回调和设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-8-ICE%E8%BF%9E%E6%8E%A5%E7%8A%B6%E6%80%81%E5%9B%9E%E8%B0%83"><span class="nav-text">2.8. ICE连接状态回调</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-9-%E6%A0%B8%E5%BF%83API%E5%9B%9E%E9%A1%BE"><span class="nav-text">2.9. 核心API回顾</span></a></li></ol></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts pjax">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+    
+<script src="/js/libs/pjax.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            REDEFINE.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            REDEFINE.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            REDEFINE.refresh();
+        });
+    });
+</script>
+
+
+
+</body>
+</html>
