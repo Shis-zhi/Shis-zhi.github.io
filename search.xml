@@ -813,5 +813,8 @@
 </ul>
 <p>以视频为例，数据由发送端的Capturer采集，交给Source，再交给本地的Track，然后兵分靓丽：一路由本地Sink进行预览，一路由Transceiver发送给接收端。接收端Track把数据交给Sink渲染。</p>
 ]]></content>
+      <tags>
+        <tag>WebRTC基础</tag>
+      </tags>
   </entry>
 </search>
